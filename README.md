@@ -8,5 +8,7 @@
 ## Motivation
 TODO
 
+MONITor is in early development and doesn't work very well.. :(
+
 ### License
 [MIT License](LICENSE)
