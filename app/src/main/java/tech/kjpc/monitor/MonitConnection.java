@@ -48,6 +48,14 @@ public class MonitConnection implements Parcelable {
         return this.url;
     }
 
+    protected String get_username() {
+        return this.username;
+    }
+
+    protected String get_password() {
+        return this.password;
+    }
+
     protected String get_authorization() {
         String authorization = null;
         String username_and_password = this.username + ":" + this.password;

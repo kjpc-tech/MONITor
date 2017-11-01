@@ -16,14 +16,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
-    protected ArrayList<MonitConnection> connections;
+    private DatabaseHelper database_helper;
+    private ArrayList<MonitConnection> connections;
     private ArrayList<MonitConnectionView> connection_views;
 
     private View.OnClickListener button_click_listener = new View.OnClickListener() {
@@ -41,15 +40,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.connections = new ArrayList<MonitConnection>();
-        this.connection_views = new ArrayList<MonitConnectionView>();
+        // connect to database
+        this.database_helper = new DatabaseHelper(getApplicationContext());
 
-        // set temporary connections
-        try {
-            //this.connections.add(new MonitConnection("TITLE", new URL("https://example.com/"), "user", "password"));
-        } catch (MalformedURLException e) {
-            Log.e("MONITor", e.getMessage());
-        }
+        // load connections from database
+        this.connections = database_helper.get_connections();
 
         // add button, status for each connection
         this.setup_layout();
@@ -59,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setup_layout() {
+        this.connection_views = new ArrayList<MonitConnectionView>();
         LinearLayout main_layout = (LinearLayout) findViewById(R.id.main_layout);
         for (MonitConnection connection : this.connections) {
             MonitConnectionView connection_view = new MonitConnectionView(this, connection);
@@ -86,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 MonitConnectionView connection_view = connection_views[v];
                 try {
                     HttpURLConnection urlConnection = (HttpURLConnection) connection_view.get_connection().get_url().openConnection();
-                    //urlConnection.setUseCaches(false);
+                    urlConnection.setUseCaches(false);
                     urlConnection.setRequestProperty("Authorization", connection_view.get_connection().get_authorization());
-                    //urlConnection.connect();
                     InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                     String line = null;
