@@ -9,8 +9,25 @@
     <LinearLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_button_add_connection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:onClick="button_add_connection_listener"
+            app:backgroundTint="@android:color/holo_purple"
+            app:srcCompat="@android:drawable/ic_input_add" />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

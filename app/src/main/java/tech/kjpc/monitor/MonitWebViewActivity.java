@@ -1,50 +1,50 @@
 package tech.kjpc.monitor;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
+import android.webkit.HttpAuthHandler;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-import java.util.HashMap;
 
 public class MonitWebViewActivity extends AppCompatActivity {
+    private MonitConnection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monit_web_view);
+
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
             Log.e("MONITor", e.getMessage());
         }
 
-        WebView webview = (WebView) findViewById(R.id.webview);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            connection = extras.getParcelable("connection");
+        }
+        if (connection == null) {
+            Log.e("MONITor", "Error: no connection.");
+        }
 
-        MonitConnection connection = null;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                connection = extras.getParcelable("connection");
+        final WebView webview = (WebView) findViewById(R.id.webview);
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest request) {
+                // TODO make sure request is within monit
+                return false;
             }
-        } else {
-            // connection_index = savedInstanceState.getSerializable("connection");
-        }
-        if (connection != null) {
-            HashMap<String, String> headers = new HashMap<String, String>();
-            String authorization = connection.get_authorization();
-            headers.put("Authorization", authorization);
-            webview.loadUrl("https://monitoring.kjpc.tech/", headers);
-        }
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+            @Override
+            public void onReceivedHttpAuthRequest(WebView webView, HttpAuthHandler authHandler, String host, String realm) {
+                // TODO make sure host is correct
+                authHandler.proceed(connection.get_username(), connection.get_password());
+            }
+        });
+        webview.loadUrl(connection.get_url().toString());
     }
 }

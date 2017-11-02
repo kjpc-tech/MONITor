@@ -18,12 +18,14 @@ public class MonitConnection implements Parcelable {
     private URL url;
     private String username;
     private String password;
+    private String status;
 
     public MonitConnection(String name, URL url, String username, String password) {
         this.name = name;
         this.url = url;
         this.username = username;
         this.password = password;
+        this.status = "N/A";
     }
 
     private MonitConnection(Parcel parcel) {
@@ -65,6 +67,14 @@ public class MonitConnection implements Parcelable {
             Log.e("MONITor", e.getMessage());
         }
         return authorization;
+    }
+
+    protected void set_status(String status) {
+        this.status = status;
+    }
+
+    protected String get_status() {
+        return this.status;
     }
 
     @Override

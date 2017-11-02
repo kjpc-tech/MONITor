@@ -35,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private View.OnLongClickListener connection_long_click_listener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            MonitConnectionView connection_view = (MonitConnectionView) view;
+            edit_connection(connection_view.get_connection());
+            return true;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,36 +52,72 @@ public class MainActivity extends AppCompatActivity {
         // connect to database
         this.database_helper = new DatabaseHelper(getApplicationContext());
 
-        // load connections from database
-        this.connections = database_helper.get_connections();
+        reload_connections();
 
-        // add button, status for each connection
-        this.setup_layout();
-
-        // check each connection
-        this.check_connections();
+        check_connections();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    // load connections from database
+    private void load_connections() {
+        this.connections = database_helper.get_connections();
+    }
+
+    // add button, status for each connection
     private void setup_layout() {
         this.connection_views = new ArrayList<MonitConnectionView>();
         LinearLayout main_layout = (LinearLayout) findViewById(R.id.main_layout);
+        main_layout.removeAllViews();
         for (MonitConnection connection : this.connections) {
             MonitConnectionView connection_view = new MonitConnectionView(this, connection);
             Button button = (Button) connection_view.findViewById(R.id.button_connection);
-            TextView textview = (TextView) connection_view.findViewById(R.id.textview_status_text);
             button.setText(connection.get_name());
             button.setTag(connection);
             button.setOnClickListener(this.button_click_listener);
-            textview.setText("Checking...");
+            connection.set_status("Initializing...");
+            connection_view.setOnLongClickListener(this.connection_long_click_listener);
             main_layout.addView(connection_view);
             this.connection_views.add(connection_view);
         }
     }
 
+    protected void reload_connections() {
+        load_connections();
+        setup_layout();
+        update_connection_views();
+    }
+
+    private void update_connection_views() {
+        for (MonitConnectionView connection_view : this.connection_views) {
+            MonitConnection connection = connection_view.get_connection();
+            TextView textview = (TextView) connection_view.findViewById(R.id.textview_status_text);
+            textview.setText(connection.get_status());
+        }
+    }
+
     private void check_connections() {
         for (MonitConnectionView connection_view : this.connection_views) {
+            connection_view.get_connection().set_status("Checking...");
             new CheckMonit().execute(connection_view);
         }
+        update_connection_views();
+    }
+
+    public void button_add_connection_listener(View view) {
+        AddMonitConnectionDialog dialog = new AddMonitConnectionDialog();
+        dialog.show(getSupportFragmentManager(), "add_monit_connection");
+    }
+
+    private void edit_connection(MonitConnection connection) {
+        EditMonitConnectionDialog dialog = new EditMonitConnectionDialog();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("connection", connection);
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), "edit_monit_connection");
     }
 
     private class CheckMonit extends AsyncTask<MonitConnectionView, Void, MonitCheckerResult> {
@@ -106,16 +151,17 @@ public class MainActivity extends AppCompatActivity {
             if (result != null) {
                 TextView textview = (TextView) result.connection_view.findViewById(R.id.textview_status_text);
                 if (result.result_text == null) {
-                    textview.setText("Error: no result.");
+                    result.connection_view.get_connection().set_status("Error: no result.");
                 } else {
                     Pattern pattern = Pattern.compile(".*Monit Service Manager.*");
                     Matcher matcher = pattern.matcher(result.result_text);
                     if (matcher.matches()) {
-                        textview.setText("All is well.");
+                        result.connection_view.get_connection().set_status("All is well.");
                     } else {
-                        textview.setText("Error: no match.");
+                        result.connection_view.get_connection().set_status("Error: no match.");
                     }
                 }
+                update_connection_views();
             }
         }
     }

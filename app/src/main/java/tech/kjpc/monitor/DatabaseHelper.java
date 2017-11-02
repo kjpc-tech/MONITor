@@ -99,14 +99,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return connections;
     }
 
-    protected void delete_connection(MonitConnection connection) {
-        /*String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
+    protected void edit_connection(MonitConnection connection, String name, String url, String username, String password) {
+        String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
 
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(query, new String[]{connection.get_name(), connection.get_url().toString(), connection.get_username(), connection.get_password()});
 
-        String[] delete_ids = new String[1];
+        ArrayList<String> update_ids = new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+            do {
+                String id = cursor.getString(0);
+                update_ids.add(id);
+            } while (cursor.moveToNext());
+        }
 
-        database.delete(TABLE_CONNECTIONS, KEY_ID " = ?", []);*/
+        String[] update_ids_array = new String[update_ids.size()];
+        update_ids.toArray(update_ids_array);
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, name);
+        values.put(KEY_URL, url);
+        values.put(KEY_USERNAME, username);
+        values.put(KEY_PASSWORD, password);
+
+        database.update(TABLE_CONNECTIONS, values, KEY_ID + " = ?", update_ids_array);
+    }
+
+    protected void delete_connection(MonitConnection connection) {
+        String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(query, new String[]{connection.get_name(), connection.get_url().toString(), connection.get_username(), connection.get_password()});
+
+        ArrayList<String> delete_ids = new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+            do {
+                String id = cursor.getString(0);
+                delete_ids.add(id);
+            } while (cursor.moveToNext());
+        }
+
+        String[] delete_ids_array = new String[delete_ids.size()];
+        delete_ids.toArray(delete_ids_array);
+
+        database.delete(TABLE_CONNECTIONS, KEY_ID + " = ?", delete_ids_array);
     }
 }
