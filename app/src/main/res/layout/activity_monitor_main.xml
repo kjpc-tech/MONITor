@@ -20,6 +20,8 @@
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
+        <!-- icons from http://publicicons.org/ -->
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/main_button_refresh"
             android:layout_width="wrap_content"
@@ -27,8 +29,9 @@
             android:layout_alignParentRight="false"
             android:clickable="true"
             android:onClick="button_refresh_listener"
-            app:backgroundTint="@android:color/holo_purple"
-            app:srcCompat="@android:drawable/ic_media_play" />
+            app:backgroundTint="@color/color_action_button"
+            app:srcCompat="@drawable/ic_reload"
+            app:elevation="0dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/main_button_add_connection"
@@ -37,7 +40,8 @@
             android:layout_alignParentRight="true"
             android:clickable="true"
             android:onClick="button_add_connection_listener"
-            app:backgroundTint="@android:color/holo_purple"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:backgroundTint="@color/color_action_button"
+            app:srcCompat="@drawable/ic_plus"
+            app:elevation="0dp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
