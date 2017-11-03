@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,20 +13,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MONITorMainActivity extends AppCompatActivity {
-    private MONITorDatabase database_helper;
+    private MONITorDatabase monitor_database;
     private ArrayList<MONITorConnection> connections;
     private ArrayList<MONITorConnectionView> connection_views;
 
@@ -58,7 +48,7 @@ public class MONITorMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monitor_main);
 
         // connect to database
-        this.database_helper = new MONITorDatabase(getApplicationContext());
+        this.monitor_database = new MONITorDatabase(getApplicationContext());
 
         reload_connections();
 
@@ -83,7 +73,7 @@ public class MONITorMainActivity extends AppCompatActivity {
 
     // load connections from database
     private void load_connections() {
-        this.connections = database_helper.get_connections();
+        this.connections = monitor_database.get_connections();
     }
 
     // add button, status for each connection
@@ -122,7 +112,8 @@ public class MONITorMainActivity extends AppCompatActivity {
     private void check_connections() {
         for (MONITorConnectionView connection_view : this.connection_views) {
             connection_view.get_connection().set_status("Checking...");
-            new CheckMonit().execute(connection_view);
+            Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
+            startService(intent);
         }
         update_connection_views();
     }
@@ -132,62 +123,15 @@ public class MONITorMainActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "add_monit_connection");
     }
 
+    public void button_refresh_listner(View view) {
+        reload_connections();
+    }
+
     private void edit_connection(MONITorConnection connection) {
         MONITorEditConnectionDialog dialog = new MONITorEditConnectionDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable("connection", connection);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_monit_connection");
-    }
-
-    private class CheckMonit extends AsyncTask<MONITorConnectionView, Void, MONITorCheckerResult> {
-        protected MONITorCheckerResult doInBackground(MONITorConnectionView... connection_views) {
-            String response = "";
-            for (int v = 0; v < connection_views.length; v++) {
-                MONITorConnectionView connection_view = connection_views[v];
-                try {
-                    HttpURLConnection urlConnection = (HttpURLConnection) connection_view.get_connection().get_url().openConnection();
-                    urlConnection.setUseCaches(false);
-                    urlConnection.setRequestProperty("Authorization", connection_view.get_connection().get_authorization());
-                    InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    String line = null;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        response += line;
-                    }
-                    return new MONITorCheckerResult(connection_view, response);
-                } catch (IOException e) {
-                    e.getMessage();
-                }
-            }
-            return null;
-        }
-
-        protected void onProgressUpdate(Void... voids) {
-
-        }
-
-        protected void onPostExecute(MONITorCheckerResult result) {
-            if (result != null) {
-                TextView textview = (TextView) result.connection_view.findViewById(R.id.textview_status_text);
-                MONITorConnection connection = result.connection_view.get_connection();
-                if (result.result_text == null) {
-                    connection.set_status("Error: no result.");
-                    connection.set_timestamp(new Date());
-                } else {
-                    Pattern pattern = Pattern.compile(".*Monit Service Manager.*");
-                    Matcher matcher = pattern.matcher(result.result_text);
-                    if (matcher.matches()) {
-                        connection.set_status("All is well.");
-                        connection.set_timestamp(new Date());
-                    } else {
-                        connection.set_status("Error: no match.");
-                        connection.set_timestamp(new Date());
-                    }
-                }
-                database_helper.edit_connection(connection, connection.get_status(), connection.get_timestamp());
-                update_connection_views();
-            }
-        }
     }
 }
