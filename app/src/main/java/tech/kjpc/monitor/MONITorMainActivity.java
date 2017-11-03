@@ -45,7 +45,7 @@ public class MONITorMainActivity extends AppCompatActivity {
         @Override
         public boolean onLongClick(View view) {
             MONITorConnectionView connection_view = (MONITorConnectionView) view;
-            edit_connection(connection_view.get_connection());
+            dialog_edit_connection(connection_view.get_connection());
             return true;
         }
     };
@@ -110,12 +110,14 @@ public class MONITorMainActivity extends AppCompatActivity {
         }
     }
 
+    // load connection from db, build layout, and update view texts
     protected void reload_connections() {
         load_connections();
         setup_layout();
         update_connection_views();
     }
 
+    // update view texts
     private void update_connection_views() {
         for (MONITorConnectionView connection_view : this.connection_views) {
             MONITorConnection connection = connection_view.get_connection();
@@ -126,25 +128,30 @@ public class MONITorMainActivity extends AppCompatActivity {
         }
     }
 
+    // call service to check connections
     private void check_connections() {
         for (MONITorConnectionView connection_view : this.connection_views) {
             connection_view.get_connection().set_status(MONITorConnection.STATUS_CHECKING);
-            Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
-            startService(intent);
         }
         update_connection_views();
+        Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
+        startService(intent);
     }
 
     public void button_add_connection_listener(View view) {
+        dialog_add_connection();
+    }
+
+    public void button_refresh_listener(View view) {
+        reload_connections();
+    }
+
+    private void dialog_add_connection() {
         MONITorAddConnectionDialog dialog = new MONITorAddConnectionDialog();
         dialog.show(getSupportFragmentManager(), DIALOG_MONITOR_CONNECTION_ADD_TAG);
     }
 
-    public void button_refresh_listner(View view) {
-        reload_connections();
-    }
-
-    private void edit_connection(MONITorConnection connection) {
+    private void dialog_edit_connection(MONITorConnection connection) {
         MONITorEditConnectionDialog dialog = new MONITorEditConnectionDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY, connection);

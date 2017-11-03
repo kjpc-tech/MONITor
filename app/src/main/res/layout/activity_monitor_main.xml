@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="false"
             android:clickable="true"
-            android:onClick="button_refresh_listner"
+            android:onClick="button_refresh_listener"
             app:backgroundTint="@android:color/holo_purple"
             app:srcCompat="@android:drawable/ic_media_play" />
 
