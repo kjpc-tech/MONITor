@@ -1,9 +1,11 @@
 package tech.kjpc.monitor;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -22,6 +24,9 @@ import java.util.regex.Pattern;
  */
 
 public class MONITorCheckerService extends IntentService {
+    public static final String NOTIFICATION_CHANNEL = "MONITor_NOTIFICATION";
+    public static final int NOTIFICATION_ID = 6664867;  // MONITor in numbers
+
     private static final String SERVICE_NAME = "MONITorCheckerService";
 
     public MONITorCheckerService() {
@@ -67,14 +72,27 @@ public class MONITorCheckerService extends IntentService {
                 connection.set_status(MONITorConnection.STATUS_GOOD);
             } else {
                 connection.set_status(MONITorConnection.STATUS_ERROR_NO_MATCH);
+                notify_status(connection);
             }
         } else {
             connection.set_status(MONITorConnection.STATUS_ERROR_NO_RESULT);
+            notify_status(connection);
         }
 
         connection.set_timestamp(new Date());
 
         // update connection in database
         database.edit_connection(connection, connection.get_status(), connection.get_timestamp());
+    }
+
+    private void notify_status(MONITorConnection connection) {
+        // make notification to alert user of error
+        NotificationCompat.Builder notification_builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL);
+        // TODO change icon
+        notification_builder.setSmallIcon(R.drawable.ic_launcher_background);
+        notification_builder.setContentTitle(getResources().getString(R.string.notification_monitor_status_title));
+        notification_builder.setContentText(getResources().getString(R.string.notification_monitor_status_text, connection.get_name(), connection.get_status()));
+        NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notification_manager.notify(NOTIFICATION_ID, notification_builder.build());
     }
 }

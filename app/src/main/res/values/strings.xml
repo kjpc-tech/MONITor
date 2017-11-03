@@ -14,4 +14,7 @@
     <string name="dialog_monitor_connection_edit_positive">Save</string>
     <string name="dialog_monitor_connection_edit_negative">Delete</string>
     <string name="dialog_monitor_connection_edit_neutral">Cancel</string>
+
+    <string name="notification_monitor_status_title">MONITor Detected an Issue</string>
+    <string name="notification_monitor_status_text">Connection %1$s has status \'%2$s\'.</string>
 </resources>
