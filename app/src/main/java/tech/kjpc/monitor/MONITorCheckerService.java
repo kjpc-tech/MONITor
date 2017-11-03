@@ -22,8 +22,8 @@ public class MONITorCheckerService extends IntentService {
         Log.d("MONITor", "Service running.");
         Context context = getApplicationContext();
 
-        DatabaseHelper database = new DatabaseHelper(context);
-        ArrayList<MonitConnection> connections = database.get_connections();
+        MONITorDatabase database = new MONITorDatabase(context);
+        ArrayList<MONITorConnection> connections = database.get_connections();
 
 
     }

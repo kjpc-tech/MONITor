@@ -19,21 +19,21 @@ import java.net.URL;
  * Created by kyle on 11/1/17.
  */
 
-public class EditMonitConnectionDialog extends AppCompatDialogFragment {
-    private MonitConnection connection;
+public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
+    private MONITorConnection connection;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.connection = (MonitConnection) getArguments().getParcelable("connection");
+        this.connection = (MONITorConnection) getArguments().getParcelable("connection");
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme_NoActionBar));
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View layout = inflater.inflate(R.layout.add_connection_dialog, null);
+        View layout = inflater.inflate(R.layout.dialog_monitor_connection, null);
 
         // set defaults
         EditText name = (EditText) layout.findViewById(R.id.dialog_add_name);
@@ -69,21 +69,21 @@ public class EditMonitConnectionDialog extends AppCompatDialogFragment {
                 
                 // TODO validate this
 
-                DatabaseHelper database = new DatabaseHelper(getActivity());
+                MONITorDatabase database = new MONITorDatabase(getActivity());
                 database.edit_connection(connection, name, url, username, password);
 
                 // reload connections
-                ((MainActivity) getActivity()).reload_connections();
+                ((MONITorMainActivity) getActivity()).reload_connections();
             }
         });
         builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                DatabaseHelper database = new DatabaseHelper(getActivity());
+                MONITorDatabase database = new MONITorDatabase(getActivity());
                 database.delete_connection(connection);
 
                 // reload connections
-                ((MainActivity) getActivity()).reload_connections();
+                ((MONITorMainActivity) getActivity()).reload_connections();
             }
         });
         builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {

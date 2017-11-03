@@ -28,7 +28,7 @@
             android:enabled="true">
         </receiver>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MONITorMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,10 +36,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MonitWebViewActivity"
-                  android:label="@string/title_activity_monit_web_view"
+        <activity android:name=".MONITorWebViewActivity"
+                  android:label="@string/title_activity_monitor_webview"
                   android:theme="@style/AppTheme"
-                  android:parentActivityName=".MainActivity">
+                  android:parentActivityName=".MONITorMainActivity">
         </activity>
     </application>
 

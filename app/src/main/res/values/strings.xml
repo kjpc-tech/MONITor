@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">MONITor</string>
-    <string name="title_activity_monit_web_view">Monit Interface</string>
+    <string name="title_activity_monitor_webview">Monit Interface</string>
 </resources>

@@ -14,7 +14,7 @@ import java.util.Date;
  * Created by kyle on 10/31/17.
  */
 
-public class MonitConnection implements Parcelable {
+public class MONITorConnection implements Parcelable {
     private static final String STATUS_DEFAULT = "N/A";
     private static final Date TIMESTAMP_DEFAULT = new Date(2000, 0, 0, 0, 0);
 
@@ -25,7 +25,7 @@ public class MonitConnection implements Parcelable {
     private String status;
     private Date timestamp;
 
-    public MonitConnection(String name, URL url, String username, String password) {
+    public MONITorConnection(String name, URL url, String username, String password) {
         this.name = name;
         this.url = url;
         this.username = username;
@@ -34,14 +34,14 @@ public class MonitConnection implements Parcelable {
         this.timestamp = TIMESTAMP_DEFAULT;
     }
 
-    public MonitConnection(String name, URL url, String username, String password, String status, Date timestamp) {
+    public MONITorConnection(String name, URL url, String username, String password, String status, Date timestamp) {
         this(name, url, username, password);
 
         this.status = status;
         this.timestamp = timestamp;
     }
 
-    private MonitConnection(Parcel parcel) {
+    private MONITorConnection(Parcel parcel) {
         String[] data = parcel.createStringArray();
         if (data.length == 4) {
             this.name = data[0];
@@ -108,15 +108,15 @@ public class MonitConnection implements Parcelable {
         parcel.writeStringArray(new String[]{this.name, this.url.toString(), this.username, this.password});
     }
 
-    public static final Parcelable.Creator<MonitConnection> CREATOR = new Parcelable.Creator<MonitConnection>() {
+    public static final Parcelable.Creator<MONITorConnection> CREATOR = new Parcelable.Creator<MONITorConnection>() {
         @Override
-        public MonitConnection createFromParcel(Parcel parcel) {
-            return new MonitConnection(parcel);
+        public MONITorConnection createFromParcel(Parcel parcel) {
+            return new MONITorConnection(parcel);
         }
 
         @Override
-        public MonitConnection[] newArray(int i) {
-            return new MonitConnection[0];
+        public MONITorConnection[] newArray(int i) {
+            return new MONITorConnection[0];
         }
     };
 }

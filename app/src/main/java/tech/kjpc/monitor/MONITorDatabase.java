@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by kyle on 10/31/17.
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class MONITorDatabase extends SQLiteOpenHelper {
     // https://developer.android.com/training/basics/data-storage/databases.html
 
     public static final int DATABASE_VERSION = 1;
@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_STATUS = "STATUS";
     private static final String KEY_TIMESTAMP = "TIMESTAMP";
 
-    public DatabaseHelper(Context context) {
+    public MONITorDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onUpgrade(sqLiteDatabase, oldVersion, newVersion);
     }
 
-    protected void add_connection(MonitConnection connection) {
+    protected void add_connection(MONITorConnection connection) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -80,8 +80,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    protected ArrayList<MonitConnection> get_connections() {
-        ArrayList<MonitConnection> connections = new ArrayList<MonitConnection>();
+    protected ArrayList<MONITorConnection> get_connections() {
+        ArrayList<MONITorConnection> connections = new ArrayList<MONITorConnection>();
 
         String query = "SELECT * FROM " + TABLE_CONNECTIONS;
 
@@ -101,14 +101,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String password = cursor.getString(4);
                 String status = cursor.getString(5);
                 Long timestamp = cursor.getLong(6);
-                connections.add(new MonitConnection(name, url, username, password, status, new Date(timestamp)));
+                connections.add(new MONITorConnection(name, url, username, password, status, new Date(timestamp)));
             } while (cursor.moveToNext());
         }
 
         return connections;
     }
 
-    protected void edit_connection(MonitConnection connection, String name, URL url, String username, String password, String status, Date timestamp) {
+    protected void edit_connection(MONITorConnection connection, String name, URL url, String username, String password, String status, Date timestamp) {
         // TODO use constant KEYS
         String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
 
@@ -137,15 +137,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.update(TABLE_CONNECTIONS, values, KEY_ID + " = ?", update_ids_array);
     }
 
-    protected void edit_connection(MonitConnection connection, String name, URL url, String username, String password) {
+    protected void edit_connection(MONITorConnection connection, String name, URL url, String username, String password) {
         edit_connection(connection, name, url, username, password, connection.get_status(), connection.get_timestamp());
     }
 
-    protected void edit_connection(MonitConnection connection, String status, Date timestamp) {
+    protected void edit_connection(MONITorConnection connection, String status, Date timestamp) {
         edit_connection(connection, connection.get_name(), connection.get_url(), connection.get_username(), connection.get_password(), status, timestamp);
     }
 
-    protected void delete_connection(MonitConnection connection) {
+    protected void delete_connection(MONITorConnection connection) {
         // TODO use constant KEYS
         String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
 

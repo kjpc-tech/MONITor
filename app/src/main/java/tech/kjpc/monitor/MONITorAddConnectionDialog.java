@@ -17,12 +17,12 @@ import java.net.URL;
  * Created by kyle on 11/1/17.
  */
 
-public class AddMonitConnectionDialog extends AppCompatDialogFragment {
+public class MONITorAddConnectionDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme_NoActionBar));
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.add_connection_dialog, null));
+        builder.setView(inflater.inflate(R.layout.dialog_monitor_connection, null));
         builder.setTitle("Add Connection");
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
@@ -35,15 +35,15 @@ public class AddMonitConnectionDialog extends AppCompatDialogFragment {
 
                 // TODO validate this
 
-                DatabaseHelper database = new DatabaseHelper(getActivity());
+                MONITorDatabase database = new MONITorDatabase(getActivity());
                 try {
-                    database.add_connection(new MonitConnection(name, new URL(url), username, password));
+                    database.add_connection(new MONITorConnection(name, new URL(url), username, password));
                 } catch (MalformedURLException e) {
                     Log.e("MONITor", e.getMessage());
                 }
 
                 // reload connections
-                ((MainActivity) getActivity()).reload_connections();
+                ((MONITorMainActivity) getActivity()).reload_connections();
             }
         });
         builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {

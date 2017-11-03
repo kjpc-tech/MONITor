@@ -26,18 +26,18 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
-    private DatabaseHelper database_helper;
-    private ArrayList<MonitConnection> connections;
-    private ArrayList<MonitConnectionView> connection_views;
+public class MONITorMainActivity extends AppCompatActivity {
+    private MONITorDatabase database_helper;
+    private ArrayList<MONITorConnection> connections;
+    private ArrayList<MONITorConnectionView> connection_views;
 
     private SimpleDateFormat timestamp_format = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
 
     private View.OnClickListener button_click_listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MonitConnection connection = (MonitConnection) view.getTag();
-            Intent intent = new Intent(MainActivity.this, MonitWebViewActivity.class);
+            MONITorConnection connection = (MONITorConnection) view.getTag();
+            Intent intent = new Intent(MONITorMainActivity.this, MONITorWebViewActivity.class);
             intent.putExtra("connection", connection);
             startActivity(intent);
         }
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnLongClickListener connection_long_click_listener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
-            MonitConnectionView connection_view = (MonitConnectionView) view;
+            MONITorConnectionView connection_view = (MONITorConnectionView) view;
             edit_connection(connection_view.get_connection());
             return true;
         }
@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_monitor_main);
 
         // connect to database
-        this.database_helper = new DatabaseHelper(getApplicationContext());
+        this.database_helper = new MONITorDatabase(getApplicationContext());
 
         reload_connections();
 
@@ -88,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
 
     // add button, status for each connection
     private void setup_layout() {
-        this.connection_views = new ArrayList<MonitConnectionView>();
+        this.connection_views = new ArrayList<MONITorConnectionView>();
         LinearLayout main_layout = (LinearLayout) findViewById(R.id.main_layout);
         main_layout.removeAllViews();
-        for (MonitConnection connection : this.connections) {
-            MonitConnectionView connection_view = new MonitConnectionView(this, connection);
+        for (MONITorConnection connection : this.connections) {
+            MONITorConnectionView connection_view = new MONITorConnectionView(this, connection);
             Button button = (Button) connection_view.findViewById(R.id.button_connection);
             button.setText(connection.get_name());
             button.setTag(connection);
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void update_connection_views() {
-        for (MonitConnectionView connection_view : this.connection_views) {
-            MonitConnection connection = connection_view.get_connection();
+        for (MONITorConnectionView connection_view : this.connection_views) {
+            MONITorConnection connection = connection_view.get_connection();
             TextView status_view = (TextView) connection_view.findViewById(R.id.textview_status_text);
             status_view.setText(connection.get_status());
             TextView timestamp_view = (TextView) connection_view.findViewById(R.id.textview_timestamp_text);
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void check_connections() {
-        for (MonitConnectionView connection_view : this.connection_views) {
+        for (MONITorConnectionView connection_view : this.connection_views) {
             connection_view.get_connection().set_status("Checking...");
             new CheckMonit().execute(connection_view);
         }
@@ -128,23 +128,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void button_add_connection_listener(View view) {
-        AddMonitConnectionDialog dialog = new AddMonitConnectionDialog();
+        MONITorAddConnectionDialog dialog = new MONITorAddConnectionDialog();
         dialog.show(getSupportFragmentManager(), "add_monit_connection");
     }
 
-    private void edit_connection(MonitConnection connection) {
-        EditMonitConnectionDialog dialog = new EditMonitConnectionDialog();
+    private void edit_connection(MONITorConnection connection) {
+        MONITorEditConnectionDialog dialog = new MONITorEditConnectionDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelable("connection", connection);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_monit_connection");
     }
 
-    private class CheckMonit extends AsyncTask<MonitConnectionView, Void, MonitCheckerResult> {
-        protected MonitCheckerResult doInBackground(MonitConnectionView... connection_views) {
+    private class CheckMonit extends AsyncTask<MONITorConnectionView, Void, MONITorCheckerResult> {
+        protected MONITorCheckerResult doInBackground(MONITorConnectionView... connection_views) {
             String response = "";
             for (int v = 0; v < connection_views.length; v++) {
-                MonitConnectionView connection_view = connection_views[v];
+                MONITorConnectionView connection_view = connection_views[v];
                 try {
                     HttpURLConnection urlConnection = (HttpURLConnection) connection_view.get_connection().get_url().openConnection();
                     urlConnection.setUseCaches(false);
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     while ((line = bufferedReader.readLine()) != null) {
                         response += line;
                     }
-                    return new MonitCheckerResult(connection_view, response);
+                    return new MONITorCheckerResult(connection_view, response);
                 } catch (IOException e) {
                     e.getMessage();
                 }
@@ -167,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        protected void onPostExecute(MonitCheckerResult result) {
+        protected void onPostExecute(MONITorCheckerResult result) {
             if (result != null) {
                 TextView textview = (TextView) result.connection_view.findViewById(R.id.textview_status_text);
-                MonitConnection connection = result.connection_view.get_connection();
+                MONITorConnection connection = result.connection_view.get_connection();
                 if (result.result_text == null) {
                     connection.set_status("Error: no result.");
                     connection.set_timestamp(new Date());

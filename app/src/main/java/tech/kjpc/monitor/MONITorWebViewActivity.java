@@ -9,13 +9,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
-public class MonitWebViewActivity extends AppCompatActivity {
-    private MonitConnection connection;
+public class MONITorWebViewActivity extends AppCompatActivity {
+    private MONITorConnection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monit_web_view);
+        setContentView(R.layout.activity_monitor_webview);
 
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
