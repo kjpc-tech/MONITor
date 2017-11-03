@@ -6,6 +6,15 @@
     <string name="view_monitor_connection_status_label">Status:</string>
     <string name="view_monitor_connection_timestamp_label">Last Checked:</string>
 
+    <string name="dialog_monitor_connection_name_label">Name:</string>
+    <string name="dialog_monitor_connection_name_hint">Name</string>
+    <string name="dialog_monitor_connection_url_label">URL:</string>
+    <string name="dialog_monitor_connection_url_hint">https://www.example.com:2812/</string>
+    <string name="dialog_monitor_connection_username_label">Username:</string>
+    <string name="dialog_monitor_connection_username_hint">user</string>
+    <string name="dialog_monitor_connection_password_label">Password:</string>
+    <string name="dialog_monitor_connection_password_hint">secret</string>
+
     <string name="dialog_monitor_connection_add_title">Add Connection</string>
     <string name="dialog_monitor_connection_add_positive">Create</string>
     <string name="dialog_monitor_connection_add_neutral">Cancel</string>
