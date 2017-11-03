@@ -1,5 +1,5 @@
 # MONITor
-## Android app to monitor [Monit](https://mmonit.com/monit/).
+## Android<sup>TM</sup> app to monitor [Monit](https://mmonit.com/monit/).
 
 ---
 ## KJ PC | [kjpc.tech](https://kjpc.tech/) | [kyle@kjpc.tech](mailto:kyle@kjpc.tech)
@@ -16,3 +16,6 @@ MONITor's primary purpose is to periodically check on Monit connections and make
 
 ### License
 [MIT License](LICENSE)
+  
+  
+<sup><sub>Android, Google Play and the Google Play logo are trademarks of Google Inc.</sub></sup>
