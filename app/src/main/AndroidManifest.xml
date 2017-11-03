@@ -3,6 +3,7 @@
     package="tech.kjpc.monitor">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -11,6 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".MONITorCheckerService"
+            android:enabled="true">
+        </service>
+
+        <receiver android:name=".MONITorBroadcastReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".MONITorAlarmReciever"
+            android:enabled="true">
+        </receiver>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,11 +35,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MonitWebViewActivity"
-            android:label="@string/title_activity_monit_web_view"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".MainActivity"></activity>
+
+        <activity android:name=".MonitWebViewActivity"
+                  android:label="@string/title_activity_monit_web_view"
+                  android:theme="@style/AppTheme"
+                  android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

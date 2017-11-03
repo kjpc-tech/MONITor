@@ -8,24 +8,37 @@ import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by kyle on 10/31/17.
  */
 
 public class MonitConnection implements Parcelable {
+    private static final String STATUS_DEFAULT = "N/A";
+    private static final Date TIMESTAMP_DEFAULT = new Date(2000, 0, 0, 0, 0);
+
     private String name;
     private URL url;
     private String username;
     private String password;
     private String status;
+    private Date timestamp;
 
     public MonitConnection(String name, URL url, String username, String password) {
         this.name = name;
         this.url = url;
         this.username = username;
         this.password = password;
-        this.status = "N/A";
+        this.status = STATUS_DEFAULT;
+        this.timestamp = TIMESTAMP_DEFAULT;
+    }
+
+    public MonitConnection(String name, URL url, String username, String password, String status, Date timestamp) {
+        this(name, url, username, password);
+
+        this.status = status;
+        this.timestamp = timestamp;
     }
 
     private MonitConnection(Parcel parcel) {
@@ -75,6 +88,14 @@ public class MonitConnection implements Parcelable {
 
     protected String get_status() {
         return this.status;
+    }
+
+    protected void set_timestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    protected Date get_timestamp() {
+        return this.timestamp;
     }
 
     @Override

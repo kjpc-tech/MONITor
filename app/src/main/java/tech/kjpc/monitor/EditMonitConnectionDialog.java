@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 /**
  * Created by kyle on 11/1/17.
@@ -55,7 +58,12 @@ public class EditMonitConnectionDialog extends AppCompatDialogFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 AlertDialog dialog = (AlertDialog) dialogInterface;
                 String name = ((EditText) dialog.findViewById(R.id.dialog_add_name)).getText().toString();
-                String url = ((EditText) dialog.findViewById(R.id.dialog_add_url)).getText().toString();
+                URL url = null;
+                try {
+                    url = new URL(((EditText) dialog.findViewById(R.id.dialog_add_url)).getText().toString());
+                } catch (MalformedURLException e) {
+                    Log.e("MONITor", e.getMessage());
+                }
                 String username = ((EditText) dialog.findViewById(R.id.dialog_add_username)).getText().toString();
                 String password = ((EditText) dialog.findViewById(R.id.dialog_add_password)).getText().toString();
                 

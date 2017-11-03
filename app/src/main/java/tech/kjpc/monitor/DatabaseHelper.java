@@ -10,6 +10,7 @@ import android.util.Log;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by kyle on 10/31/17.
@@ -27,6 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_URL = "URL";
     private static final String KEY_USERNAME = "USERNAME";
     private static final String KEY_PASSWORD = "PASSWORD";
+    private static final String KEY_STATUS = "STATUS";
+    private static final String KEY_TIMESTAMP = "TIMESTAMP";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,7 +43,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + KEY_NAME + " TEXT,"
                 + KEY_URL + " TEXT,"
                 + KEY_USERNAME + " TEXT,"
-                + KEY_PASSWORD + " TEXT"
+                + KEY_PASSWORD + " TEXT,"
+                + KEY_STATUS + " TEXT,"
+                + KEY_TIMESTAMP + " INTEGER"
                 + " )";
         sqLiteDatabase.execSQL(create_connections_table);
     }
@@ -68,6 +73,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_URL, connection.get_url().toString());
         values.put(KEY_USERNAME, connection.get_username());
         values.put(KEY_PASSWORD, connection.get_password());
+        values.put(KEY_STATUS, connection.get_status());
+        values.put(KEY_TIMESTAMP, connection.get_timestamp().getTime());
 
         database.insert(TABLE_CONNECTIONS, null, values);
         database.close();
@@ -92,14 +99,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
                 String username = cursor.getString(3);
                 String password = cursor.getString(4);
-                connections.add(new MonitConnection(name, url, username, password));
+                String status = cursor.getString(5);
+                Long timestamp = cursor.getLong(6);
+                connections.add(new MonitConnection(name, url, username, password, status, new Date(timestamp)));
             } while (cursor.moveToNext());
         }
 
         return connections;
     }
 
-    protected void edit_connection(MonitConnection connection, String name, String url, String username, String password) {
+    protected void edit_connection(MonitConnection connection, String name, URL url, String username, String password, String status, Date timestamp) {
+        // TODO use constant KEYS
         String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
 
         SQLiteDatabase database = this.getWritableDatabase();
@@ -118,14 +128,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);
-        values.put(KEY_URL, url);
+        values.put(KEY_URL, url.toString());
         values.put(KEY_USERNAME, username);
         values.put(KEY_PASSWORD, password);
+        values.put(KEY_STATUS, status);
+        values.put(KEY_TIMESTAMP, timestamp.getTime());
 
         database.update(TABLE_CONNECTIONS, values, KEY_ID + " = ?", update_ids_array);
     }
 
+    protected void edit_connection(MonitConnection connection, String name, URL url, String username, String password) {
+        edit_connection(connection, name, url, username, password, connection.get_status(), connection.get_timestamp());
+    }
+
+    protected void edit_connection(MonitConnection connection, String status, Date timestamp) {
+        edit_connection(connection, connection.get_name(), connection.get_url(), connection.get_username(), connection.get_password(), status, timestamp);
+    }
+
     protected void delete_connection(MonitConnection connection) {
+        // TODO use constant KEYS
         String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
 
         SQLiteDatabase database = this.getWritableDatabase();
