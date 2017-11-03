@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">MONITor</string>
-    <string name="title_activity_monitor_webview">Monit Interface</string>
+
+    <string name="activity_monitor_webview_title">Monit Interface</string>
+
+    <string name="view_monitor_connection_status_label">Status:</string>
+    <string name="view_monitor_connection_timestamp_label">Last Checked:</string>
+
+    <string name="dialog_monitor_connection_add_title">Add Connection</string>
+    <string name="dialog_monitor_connection_add_positive">Create</string>
+    <string name="dialog_monitor_connection_add_neutral">Cancel</string>
+
+    <string name="dialog_monitor_connection_edit_title">Edit Connection</string>
+    <string name="dialog_monitor_connection_edit_positive">Save</string>
+    <string name="dialog_monitor_connection_edit_negative">Delete</string>
+    <string name="dialog_monitor_connection_edit_neutral">Cancel</string>
 </resources>

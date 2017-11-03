@@ -20,18 +20,18 @@ public class MONITorWebViewActivity extends AppCompatActivity {
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
-            Log.e("MONITor", e.getMessage());
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            connection = extras.getParcelable("connection");
+            connection = extras.getParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY);
         }
         if (connection == null) {
-            Log.e("MONITor", "Error: no connection.");
+            Log.e(MONITorMainActivity.LOG_TAG, "Error: no connection.");
         }
 
-        final WebView webview = (WebView) findViewById(R.id.webview);
+        final WebView webview = (WebView) findViewById(R.id.webview_webview);
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest request) {

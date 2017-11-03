@@ -8,7 +8,7 @@
     android:padding="5dp">
 
     <Button
-        android:id="@+id/button_connection"
+        android:id="@+id/view_connection_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -20,15 +20,14 @@
         android:paddingTop="2dp">
 
         <TextView
-            android:id="@+id/textview_status_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Status:" />
+            android:text="@string/view_monitor_connection_status_label" />
 
         <TextView
-            android:id="@+id/textview_status_text"
+            android:id="@+id/view_connection_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
@@ -43,15 +42,14 @@
         android:paddingTop="2dp">
 
         <TextView
-            android:id="@+id/textview_timestamp_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Last Checked:" />
+            android:text="@string/view_monitor_connection_timestamp_label" />
 
         <TextView
-            android:id="@+id/textview_timestamp_text"
+            android:id="@+id/view_connection_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"

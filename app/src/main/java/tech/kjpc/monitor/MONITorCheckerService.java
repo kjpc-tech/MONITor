@@ -22,13 +22,15 @@ import java.util.regex.Pattern;
  */
 
 public class MONITorCheckerService extends IntentService {
+    private static final String SERVICE_NAME = "MONITorCheckerService";
+
     public MONITorCheckerService() {
-        super("MONITorCheckerService");
+        super(SERVICE_NAME);
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.d("MONITor", "Service running.");
+        Log.d(MONITorMainActivity.LOG_TAG, "Service running.");
         Context context = getApplicationContext();
 
         MONITorDatabase database = new MONITorDatabase(context);
@@ -62,12 +64,12 @@ public class MONITorCheckerService extends IntentService {
             Pattern pattern = Pattern.compile(".*Monit Service Manager.*");
             Matcher matcher = pattern.matcher(response);
             if (matcher.matches()) {
-                connection.set_status("All is well.");
+                connection.set_status(MONITorConnection.STATUS_GOOD);
             } else {
-                connection.set_status("Error: no match.");
+                connection.set_status(MONITorConnection.STATUS_ERROR_NO_MATCH);
             }
         } else {
-            connection.set_status("Error: no result.");
+            connection.set_status(MONITorConnection.STATUS_ERROR_NO_RESULT);
         }
 
         connection.set_timestamp(new Date());

@@ -16,6 +16,11 @@ import java.util.Date;
 
 public class MONITorConnection implements Parcelable {
     private static final String STATUS_DEFAULT = "N/A";
+    protected static final String STATUS_CHECKING = "Checking..";
+    protected static final String STATUS_GOOD = "All is well.";
+    protected static final String STATUS_ERROR_NO_MATCH = "Error: no match.";
+    protected static final String STATUS_ERROR_NO_RESULT = "Error: no result.";
+
     private static final Date TIMESTAMP_DEFAULT = new Date(2000, 0, 0, 0, 0);
 
     private String name;
@@ -48,7 +53,7 @@ public class MONITorConnection implements Parcelable {
             try {
                 this.url = new URL(data[1]);
             } catch (MalformedURLException e) {
-                Log.e("MONITor", e.getMessage());
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
             }
             this.username = data[2];
             this.password = data[3];
@@ -77,7 +82,7 @@ public class MONITorConnection implements Parcelable {
         try {
             authorization = "Basic " + Base64.encodeToString(username_and_password.getBytes("UTF-8"), Base64.NO_WRAP);
         } catch (UnsupportedEncodingException e) {
-            Log.e("MONITor", e.getMessage());
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
         return authorization;
     }

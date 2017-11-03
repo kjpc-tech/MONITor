@@ -95,7 +95,7 @@ public class MONITorDatabase extends SQLiteOpenHelper {
                 try {
                     url = new URL(cursor.getString(2));
                 } catch (MalformedURLException e) {
-                    Log.e("MONITor", e.getMessage());
+                    Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
                 }
                 String username = cursor.getString(3);
                 String password = cursor.getString(4);
@@ -108,9 +108,8 @@ public class MONITorDatabase extends SQLiteOpenHelper {
         return connections;
     }
 
-    protected void edit_connection(MONITorConnection connection, String name, URL url, String username, String password, String status, Date timestamp) {
-        // TODO use constant KEYS
-        String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
+    private String[] get_matching_connection_ids(MONITorConnection connection) {
+        String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE " + KEY_NAME + "=? AND " + KEY_URL + "=? AND " + KEY_USERNAME + "=? AND " + KEY_PASSWORD + "=?";
 
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(query, new String[]{connection.get_name(), connection.get_url().toString(), connection.get_username(), connection.get_password()});
@@ -125,6 +124,13 @@ public class MONITorDatabase extends SQLiteOpenHelper {
 
         String[] update_ids_array = new String[update_ids.size()];
         update_ids.toArray(update_ids_array);
+        return update_ids_array;
+    }
+
+    protected void edit_connection(MONITorConnection connection, String name, URL url, String username, String password, String status, Date timestamp) {
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        String[] update_ids_array = get_matching_connection_ids(connection);
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);
@@ -146,22 +152,9 @@ public class MONITorDatabase extends SQLiteOpenHelper {
     }
 
     protected void delete_connection(MONITorConnection connection) {
-        // TODO use constant KEYS
-        String query = "SELECT " + KEY_ID + " FROM " + TABLE_CONNECTIONS + " WHERE NAME=? AND URL=? AND USERNAME=? AND PASSWORD=?";
-
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery(query, new String[]{connection.get_name(), connection.get_url().toString(), connection.get_username(), connection.get_password()});
 
-        ArrayList<String> delete_ids = new ArrayList<String>();
-        if (cursor.moveToFirst()) {
-            do {
-                String id = cursor.getString(0);
-                delete_ids.add(id);
-            } while (cursor.moveToNext());
-        }
-
-        String[] delete_ids_array = new String[delete_ids.size()];
-        delete_ids.toArray(delete_ids_array);
+        String[] delete_ids_array = get_matching_connection_ids(connection);
 
         database.delete(TABLE_CONNECTIONS, KEY_ID + " = ?", delete_ids_array);
     }

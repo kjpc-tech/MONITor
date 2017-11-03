@@ -26,7 +26,7 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.connection = (MONITorConnection) getArguments().getParcelable("connection");
+        this.connection = (MONITorConnection) getArguments().getParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY);
     }
 
     @Override
@@ -36,10 +36,10 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
         View layout = inflater.inflate(R.layout.dialog_monitor_connection, null);
 
         // set defaults
-        EditText name = (EditText) layout.findViewById(R.id.dialog_add_name);
-        EditText url = (EditText) layout.findViewById(R.id.dialog_add_url);
-        EditText username = (EditText) layout.findViewById(R.id.dialog_add_username);
-        EditText password = (EditText) layout.findViewById(R.id.dialog_add_password);
+        EditText name = (EditText) layout.findViewById(R.id.dialog_connection_name);
+        EditText url = (EditText) layout.findViewById(R.id.dialog_connection_url);
+        EditText username = (EditText) layout.findViewById(R.id.dialog_connection_username);
+        EditText password = (EditText) layout.findViewById(R.id.dialog_connection_password);
         if (this.connection != null) {
             try {
                 name.setText(this.connection.get_name());
@@ -47,25 +47,25 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
                 username.setText(this.connection.get_username());
                 password.setText(this.connection.get_password());
             } catch (NullPointerException e) {
-                Log.e("MONITor", e.getMessage());
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
             }
         }
 
         builder.setView(layout);
-        builder.setTitle("Edit Connection");
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.dialog_monitor_connection_edit_title));
+        builder.setPositiveButton(getResources().getString(R.string.dialog_monitor_connection_edit_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 AlertDialog dialog = (AlertDialog) dialogInterface;
-                String name = ((EditText) dialog.findViewById(R.id.dialog_add_name)).getText().toString();
+                String name = ((EditText) dialog.findViewById(R.id.dialog_connection_name)).getText().toString();
                 URL url = null;
                 try {
-                    url = new URL(((EditText) dialog.findViewById(R.id.dialog_add_url)).getText().toString());
+                    url = new URL(((EditText) dialog.findViewById(R.id.dialog_connection_url)).getText().toString());
                 } catch (MalformedURLException e) {
-                    Log.e("MONITor", e.getMessage());
+                    Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
                 }
-                String username = ((EditText) dialog.findViewById(R.id.dialog_add_username)).getText().toString();
-                String password = ((EditText) dialog.findViewById(R.id.dialog_add_password)).getText().toString();
+                String username = ((EditText) dialog.findViewById(R.id.dialog_connection_username)).getText().toString();
+                String password = ((EditText) dialog.findViewById(R.id.dialog_connection_password)).getText().toString();
                 
                 // TODO validate this
 
@@ -76,7 +76,7 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
                 ((MONITorMainActivity) getActivity()).reload_connections();
             }
         });
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.dialog_monitor_connection_edit_negative), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 MONITorDatabase database = new MONITorDatabase(getActivity());
@@ -86,7 +86,7 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
                 ((MONITorMainActivity) getActivity()).reload_connections();
             }
         });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getResources().getString(R.string.dialog_monitor_connection_edit_neutral), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

@@ -17,6 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MONITorMainActivity extends AppCompatActivity {
+    public static final String LOG_TAG = "MONITor";
+    protected static final String CONNECTION_PARCELABLE_KEY = "connection";
+    private static final String DIALOG_MONITOR_CONNECTION_ADD_TAG = "dialog_monitor_connection_add";
+    private static final String DIALOG_MONITOR_CONNECTION_EDIT_TAG = "dialog_monitor_connection_edit";
+
     private MONITorDatabase monitor_database;
     private ArrayList<MONITorConnection> connections;
     private ArrayList<MONITorConnectionView> connection_views;
@@ -28,7 +33,7 @@ public class MONITorMainActivity extends AppCompatActivity {
         public void onClick(View view) {
             MONITorConnection connection = (MONITorConnection) view.getTag();
             Intent intent = new Intent(MONITorMainActivity.this, MONITorWebViewActivity.class);
-            intent.putExtra("connection", connection);
+            intent.putExtra(MONITorMainActivity.CONNECTION_PARCELABLE_KEY, connection);
             startActivity(intent);
         }
     };
@@ -68,7 +73,7 @@ public class MONITorMainActivity extends AppCompatActivity {
         final PendingIntent pending_intent = PendingIntent.getBroadcast(this, MONITorAlarmReciever.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm_manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm_manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), interval, pending_intent);
-        Log.d("MONITor", "Set alarm.");
+        Log.d(MONITorMainActivity.LOG_TAG, "Set alarm.");
     }
 
     // load connections from database
@@ -79,11 +84,11 @@ public class MONITorMainActivity extends AppCompatActivity {
     // add button, status for each connection
     private void setup_layout() {
         this.connection_views = new ArrayList<MONITorConnectionView>();
-        LinearLayout main_layout = (LinearLayout) findViewById(R.id.main_layout);
+        LinearLayout main_layout = (LinearLayout) findViewById(R.id.main_connection_holder);
         main_layout.removeAllViews();
         for (MONITorConnection connection : this.connections) {
             MONITorConnectionView connection_view = new MONITorConnectionView(this, connection);
-            Button button = (Button) connection_view.findViewById(R.id.button_connection);
+            Button button = (Button) connection_view.findViewById(R.id.view_connection_link);
             button.setText(connection.get_name());
             button.setTag(connection);
             button.setOnClickListener(this.button_click_listener);
@@ -102,16 +107,16 @@ public class MONITorMainActivity extends AppCompatActivity {
     private void update_connection_views() {
         for (MONITorConnectionView connection_view : this.connection_views) {
             MONITorConnection connection = connection_view.get_connection();
-            TextView status_view = (TextView) connection_view.findViewById(R.id.textview_status_text);
+            TextView status_view = (TextView) connection_view.findViewById(R.id.view_connection_status);
             status_view.setText(connection.get_status());
-            TextView timestamp_view = (TextView) connection_view.findViewById(R.id.textview_timestamp_text);
+            TextView timestamp_view = (TextView) connection_view.findViewById(R.id.view_connection_timestamp);
             timestamp_view.setText(timestamp_format.format(connection.get_timestamp()));
         }
     }
 
     private void check_connections() {
         for (MONITorConnectionView connection_view : this.connection_views) {
-            connection_view.get_connection().set_status("Checking...");
+            connection_view.get_connection().set_status(MONITorConnection.STATUS_CHECKING);
             Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
             startService(intent);
         }
@@ -120,7 +125,7 @@ public class MONITorMainActivity extends AppCompatActivity {
 
     public void button_add_connection_listener(View view) {
         MONITorAddConnectionDialog dialog = new MONITorAddConnectionDialog();
-        dialog.show(getSupportFragmentManager(), "add_monit_connection");
+        dialog.show(getSupportFragmentManager(), DIALOG_MONITOR_CONNECTION_ADD_TAG);
     }
 
     public void button_refresh_listner(View view) {
@@ -130,8 +135,8 @@ public class MONITorMainActivity extends AppCompatActivity {
     private void edit_connection(MONITorConnection connection) {
         MONITorEditConnectionDialog dialog = new MONITorEditConnectionDialog();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("connection", connection);
+        bundle.putParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY, connection);
         dialog.setArguments(bundle);
-        dialog.show(getSupportFragmentManager(), "edit_monit_connection");
+        dialog.show(getSupportFragmentManager(), DIALOG_MONITOR_CONNECTION_EDIT_TAG);
     }
 }

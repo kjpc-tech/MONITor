@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/dialog_add_name"
+        android:id="@+id/dialog_connection_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -14,7 +14,7 @@
         android:inputType="text|textCapWords" />
 
     <EditText
-        android:id="@+id/dialog_add_url"
+        android:id="@+id/dialog_connection_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -23,7 +23,7 @@
         android:inputType="textUri" />
 
     <EditText
-        android:id="@+id/dialog_add_username"
+        android:id="@+id/dialog_connection_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -31,7 +31,7 @@
         android:hint="username" />
 
     <EditText
-        android:id="@+id/dialog_add_password"
+        android:id="@+id/dialog_connection_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

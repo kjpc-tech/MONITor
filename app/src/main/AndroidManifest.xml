@@ -37,7 +37,7 @@
         </activity>
 
         <activity android:name=".MONITorWebViewActivity"
-                  android:label="@string/title_activity_monitor_webview"
+                  android:label="@string/activity_monitor_webview_title"
                   android:theme="@style/AppTheme"
                   android:parentActivityName=".MONITorMainActivity">
         </activity>

@@ -14,7 +14,7 @@ public class MONITorAlarmReciever extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("MONITor", "Alarm went off!");
+        Log.d(MONITorMainActivity.LOG_TAG, "Alarm went off!");
         Intent alarm_intent = new Intent(context, MONITorCheckerService.class);
         context.startService(alarm_intent);
     }
