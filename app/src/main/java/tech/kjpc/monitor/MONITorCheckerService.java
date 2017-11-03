@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -26,6 +27,8 @@ import java.util.regex.Pattern;
 public class MONITorCheckerService extends IntentService {
     public static final String NOTIFICATION_CHANNEL = "MONITor_NOTIFICATION";
     public static final int NOTIFICATION_ID = 6664867;  // MONITor in numbers
+
+    public static  final String BROADCAST_ID = "MONITor_BROADCAST";
 
     private static final String SERVICE_NAME = "MONITorCheckerService";
 
@@ -83,6 +86,14 @@ public class MONITorCheckerService extends IntentService {
 
         // update connection in database
         database.edit_connection(connection, connection.get_status(), connection.get_timestamp());
+
+        // set main activity know it should update
+        broadcast_completion();
+    }
+
+    private void broadcast_completion() {
+        Intent intent = new Intent(BROADCAST_ID);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     private void notify_status(MONITorConnection connection) {
