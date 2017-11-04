@@ -10,6 +10,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -63,17 +64,31 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
                     url = new URL(((EditText) dialog.findViewById(R.id.dialog_connection_url)).getText().toString());
                 } catch (MalformedURLException e) {
                     Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_url_invalid), Toast.LENGTH_SHORT).show();
                 }
                 String username = ((EditText) dialog.findViewById(R.id.dialog_connection_username)).getText().toString();
                 String password = ((EditText) dialog.findViewById(R.id.dialog_connection_password)).getText().toString();
                 
                 // TODO validate this
 
-                MONITorDatabase database = new MONITorDatabase(getActivity());
-                database.edit_connection(connection, name, url, username, password);
+                boolean connection_edited = false;
 
-                // reload connections
-                ((MONITorMainActivity) getActivity()).reload_connections();
+                if (name != null && url != null && username != null && password != null) {
+                    MONITorDatabase database = new MONITorDatabase(getActivity());
+                    try {
+                        database.edit_connection(connection, name, url, username, password);
+                        connection_edited = true;
+                    } catch (Exception e) {
+                        Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+                    }
+                }
+
+                if (connection_edited) {
+                    // reload connections
+                    ((MONITorMainActivity) getActivity()).reload_connections();
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_editing_connection), Toast.LENGTH_LONG).show();
+                }
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.dialog_monitor_connection_edit_negative), new DialogInterface.OnClickListener() {

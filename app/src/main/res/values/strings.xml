@@ -24,6 +24,10 @@
     <string name="dialog_monitor_connection_edit_negative">Delete</string>
     <string name="dialog_monitor_connection_edit_neutral">Cancel</string>
 
+    <string name="error_url_invalid">Error: invalid URL.</string>
+    <string name="error_adding_connection">Error: couldn\'t add connection.</string>
+    <string name="error_editing_connection">Error: couldn\'t edit connection.</string>
+
     <string name="notification_monitor_status_title">MONITor Detected an Issue</string>
     <string name="notification_monitor_status_text">Connection %1$s has status \'%2$s\'.</string>
 </resources>

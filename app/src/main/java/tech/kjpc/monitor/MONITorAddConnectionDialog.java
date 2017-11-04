@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,21 +30,36 @@ public class MONITorAddConnectionDialog extends AppCompatDialogFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 AlertDialog dialog = (AlertDialog) dialogInterface;
                 String name = ((EditText) dialog.findViewById(R.id.dialog_connection_name)).getText().toString();
-                String url = ((EditText) dialog.findViewById(R.id.dialog_connection_url)).getText().toString();
+                URL url = null;
+                try {
+                    url = new URL(((EditText) dialog.findViewById(R.id.dialog_connection_url)).getText().toString());
+                } catch (MalformedURLException e) {
+                    Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_url_invalid), Toast.LENGTH_SHORT).show();
+                }
                 String username = ((EditText) dialog.findViewById(R.id.dialog_connection_username)).getText().toString();
                 String password = ((EditText) dialog.findViewById(R.id.dialog_connection_password)).getText().toString();
 
                 // TODO validate this
 
-                MONITorDatabase database = new MONITorDatabase(getActivity());
-                try {
-                    database.add_connection(new MONITorConnection(name, new URL(url), username, password));
-                } catch (MalformedURLException e) {
-                    Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+                boolean connection_added = false;
+
+                if (name != null && url != null && username != null && password != null) {
+                    MONITorDatabase database = new MONITorDatabase(getActivity());
+                    try {
+                        database.add_connection(new MONITorConnection(name, url, username, password));
+                        connection_added = true;
+                    } catch (Exception e) {
+                        Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+                    }
                 }
 
-                // reload connections
-                ((MONITorMainActivity) getActivity()).reload_connections();
+                if (connection_added) {
+                    // reload connections
+                    ((MONITorMainActivity) getActivity()).reload_connections();
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_adding_connection), Toast.LENGTH_LONG).show();
+                }
             }
         });
         builder.setNeutralButton(getResources().getString(R.string.dialog_monitor_connection_add_neutral), new DialogInterface.OnClickListener() {
