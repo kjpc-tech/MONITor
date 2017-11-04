@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 
 
 public class MONITorWebViewActivity extends AppCompatActivity {
+    private WebView webview;
     private MONITorConnection connection;
 
     @Override
@@ -31,7 +32,7 @@ public class MONITorWebViewActivity extends AppCompatActivity {
             Log.e(MONITorMainActivity.LOG_TAG, "Error: no connection.");
         }
 
-        final WebView webview = (WebView) findViewById(R.id.webview_webview);
+        this.webview = (WebView) findViewById(R.id.webview_webview);
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest request) {
@@ -46,5 +47,14 @@ public class MONITorWebViewActivity extends AppCompatActivity {
             }
         });
         webview.loadUrl(connection.get_url().toString());
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.webview.canGoBack()) {
+            this.webview.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
