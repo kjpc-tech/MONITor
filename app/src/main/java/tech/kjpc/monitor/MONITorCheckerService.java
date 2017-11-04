@@ -99,8 +99,7 @@ public class MONITorCheckerService extends IntentService {
     private void notify_status(MONITorConnection connection) {
         // make notification to alert user of error
         NotificationCompat.Builder notification_builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL);
-        // TODO change icon
-        notification_builder.setSmallIcon(R.drawable.ic_launcher_background);
+        notification_builder.setSmallIcon(R.drawable.ic_notification);
         notification_builder.setContentTitle(getResources().getString(R.string.notification_monitor_status_title));
         notification_builder.setContentText(getResources().getString(R.string.notification_monitor_status_text, connection.get_name(), connection.get_status()));
         NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
