@@ -61,15 +61,13 @@ public class MONITorMainActivity extends AppCompatActivity {
         BroadcastReceiver checker_result_receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                reload_connections();
+                refresh_connections();
             }
         };
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .registerReceiver(checker_result_receiver, new IntentFilter(MONITorCheckerService.BROADCAST_ID));
 
         reload_connections();
-
-        check_connections();
 
         schedule_alarm();
     }
@@ -110,11 +108,18 @@ public class MONITorMainActivity extends AppCompatActivity {
         }
     }
 
+    protected void refresh_connections() {
+        load_connections();
+        setup_layout();
+        update_connection_views();
+    }
+
     // load connection from db, build layout, and update view texts
     protected void reload_connections() {
         load_connections();
         setup_layout();
         update_connection_views();
+        check_connections();
     }
 
     // update view texts
@@ -143,7 +148,7 @@ public class MONITorMainActivity extends AppCompatActivity {
     }
 
     public void button_refresh_listener(View view) {
-        reload_connections();
+        refresh_connections();
     }
 
     private void dialog_add_connection() {
