@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MONITorMainActivity extends AppCompatActivity {
+    public static final int NOTIFICATION_REQUEST = 6664867;  // MONITor in numbers
+
     public static final String LOG_TAG = "MONITor";
     protected static final String CONNECTION_PARCELABLE_KEY = "connection";
     private static final String DIALOG_MONITOR_CONNECTION_ADD_TAG = "dialog_monitor_connection_add";
