@@ -22,6 +22,8 @@ import java.util.ArrayList;
 public class MONITorMainActivity extends AppCompatActivity {
     public static final int NOTIFICATION_REQUEST = 6664867;  // MONITor in numbers
 
+    protected static boolean app_is_running = false;
+
     public static final String LOG_TAG = "MONITor";
     protected static final String CONNECTION_PARCELABLE_KEY = "connection";
     private static final String DIALOG_MONITOR_CONNECTION_ADD_TAG = "dialog_monitor_connection_add";
@@ -75,8 +77,17 @@ public class MONITorMainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        app_is_running = false;
+
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
+        app_is_running = true;
     }
 
     private void schedule_alarm() {
@@ -132,6 +143,15 @@ public class MONITorMainActivity extends AppCompatActivity {
             status_view.setText(connection.get_status());
             TextView timestamp_view = (TextView) connection_view.findViewById(R.id.view_connection_timestamp);
             timestamp_view.setText(timestamp_format.format(connection.get_timestamp()));
+            // update connection status textview color
+            if (connection.has_good_status()) {
+                status_view.setTextColor(getResources().getColor(R.color.color_text_good));
+            } else if (connection.has_error_status()) {
+                status_view.setTextColor(getResources().getColor(R.color.color_text_error));
+            } else {
+                // get default text color from timestamp textview
+                status_view.setTextColor(timestamp_view.getTextColors());
+            }
         }
     }
 

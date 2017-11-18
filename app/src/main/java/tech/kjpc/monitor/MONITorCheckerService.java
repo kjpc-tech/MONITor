@@ -112,15 +112,19 @@ public class MONITorCheckerService extends IntentService {
     }
 
     private void notify_status(MONITorConnection connection) {
-        Intent notification_intent = new Intent(getApplicationContext(), MONITorMainActivity.class);
-        PendingIntent notification_pending_intent = PendingIntent.getActivity(getApplicationContext(),MONITorMainActivity.NOTIFICATION_REQUEST, notification_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // make notification to alert user of error
-        NotificationCompat.Builder notification_builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL);
-        notification_builder.setSmallIcon(R.drawable.ic_notification);
-        notification_builder.setContentTitle(getResources().getString(R.string.notification_monitor_status_title));
-        notification_builder.setContentText(getResources().getString(R.string.notification_monitor_status_text, connection.get_name(), connection.get_status()));
-        notification_builder.setContentIntent(notification_pending_intent);
-        NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notification_manager.notify(NOTIFICATION_ID, notification_builder.build());
+        // only notify if the app is running in the background
+        if (!MONITorMainActivity.app_is_running) {
+            Intent notification_intent = new Intent(getApplicationContext(), MONITorMainActivity.class);
+            PendingIntent notification_pending_intent = PendingIntent.getActivity(getApplicationContext(), MONITorMainActivity.NOTIFICATION_REQUEST, notification_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            // make notification to alert user of error
+            NotificationCompat.Builder notification_builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL);
+            notification_builder.setSmallIcon(R.drawable.ic_notification);
+            notification_builder.setContentTitle(getResources().getString(R.string.notification_monitor_status_title));
+            notification_builder.setContentText(getResources().getString(R.string.notification_monitor_status_text, connection.get_name(), connection.get_status()));
+            notification_builder.setAutoCancel(true);
+            notification_builder.setContentIntent(notification_pending_intent);
+            NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notification_manager.notify(NOTIFICATION_ID, notification_builder.build());
+        }
     }
 }

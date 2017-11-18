@@ -104,6 +104,27 @@ public class MONITorConnection implements Parcelable {
         return this.timestamp;
     }
 
+    protected boolean has_good_status() {
+        if (this.status.equals(STATUS_GOOD)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected boolean has_error_status() {
+        switch (this.status) {
+            case STATUS_ERROR_NO_MATCH:
+                return true;
+            case STATUS_ERROR_NO_RESULT:
+                return true;
+            case STATUS_NO_NETWORK:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     public int describeContents() {
         return 0;
