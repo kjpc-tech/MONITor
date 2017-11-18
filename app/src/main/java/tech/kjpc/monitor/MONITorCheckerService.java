@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -53,34 +55,40 @@ public class MONITorCheckerService extends IntentService {
     private void check_connection(MONITorDatabase database, MONITorConnection connection) {
         String response = "";
 
-        // make request and get response
-        try {
-            HttpURLConnection urlConnection = (HttpURLConnection) connection.get_url().openConnection();
-            urlConnection.setUseCaches(false);
-            urlConnection.setRequestProperty("Authorization", connection.get_authorization());
-            InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                response += line;
+        if (is_online()) {
+            // make request and get response
+            try {
+                HttpURLConnection urlConnection = (HttpURLConnection) connection.get_url().openConnection();
+                urlConnection.setUseCaches(false);
+                urlConnection.setRequestProperty("Authorization", connection.get_authorization());
+                InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String line = null;
+                while ((line = bufferedReader.readLine()) != null) {
+                    response += line;
+                }
+            } catch (IOException e) {
+                e.getMessage();
             }
-        } catch (IOException e) {
-            e.getMessage();
-        }
 
-        // check response
-        if (response != null && response.length() > 0) {
-            Pattern pattern = Pattern.compile(".*Monit Service Manager.*");
-            Matcher matcher = pattern.matcher(response);
-            if (matcher.matches()) {
-                connection.set_status(MONITorConnection.STATUS_GOOD);
+            // check response
+            if (response != null && response.length() > 0) {
+                Pattern pattern = Pattern.compile(".*Monit Service Manager.*");
+                Matcher matcher = pattern.matcher(response);
+                if (matcher.matches()) {
+                    connection.set_status(MONITorConnection.STATUS_GOOD);
+                } else {
+                    connection.set_status(MONITorConnection.STATUS_ERROR_NO_MATCH);
+                    notify_status(connection);
+                }
             } else {
-                connection.set_status(MONITorConnection.STATUS_ERROR_NO_MATCH);
+                connection.set_status(MONITorConnection.STATUS_ERROR_NO_RESULT);
                 notify_status(connection);
             }
         } else {
-            connection.set_status(MONITorConnection.STATUS_ERROR_NO_RESULT);
-            notify_status(connection);
+            connection.set_status(MONITorConnection.STATUS_NO_NETWORK);
+            // don't notify when no network at the moment
+            //  this gets annoying when switching networks (ie. walking between buildings, etc)
         }
 
         connection.set_timestamp(new Date());
@@ -90,6 +98,12 @@ public class MONITorCheckerService extends IntentService {
 
         // set main activity know it should update
         broadcast_completion();
+    }
+
+    private boolean is_online() {
+        ConnectivityManager connectivity_manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo active_network = connectivity_manager.getActiveNetworkInfo();
+        return active_network != null && active_network.isConnectedOrConnecting();
     }
 
     private void broadcast_completion() {

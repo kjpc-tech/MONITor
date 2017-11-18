@@ -20,6 +20,7 @@ public class MONITorConnection implements Parcelable {
     protected static final String STATUS_GOOD = "All is well.";
     protected static final String STATUS_ERROR_NO_MATCH = "Error: no match.";
     protected static final String STATUS_ERROR_NO_RESULT = "Error: no result.";
+    protected static final String STATUS_NO_NETWORK = "Error: no network.";
 
     private static final Date TIMESTAMP_DEFAULT = new Date(2000, 0, 0, 0, 0);
 
