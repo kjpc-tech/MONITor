@@ -41,14 +41,29 @@ public class MONITorCheckerService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.d(MONITorMainActivity.LOG_TAG, "Service running.");
+        //Log.d(MONITorMainActivity.LOG_TAG, "Service running.");
         Context context = getApplicationContext();
-
         MONITorDatabase database = new MONITorDatabase(context);
-        ArrayList<MONITorConnection> connections = database.get_connections();
+        MONITorConnection single_connection = null;
 
-        for (MONITorConnection connection : connections) {
-            check_connection(database, connection);
+        if (intent != null && intent.hasExtra(MONITorMainActivity.CONNECTION_PARCELABLE_KEY)) {
+            try {
+                single_connection = (MONITorConnection) intent.getExtras().getParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY);
+            } catch (Exception e) {
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+            }
+        }
+
+        if (single_connection != null) {
+            // just check single connection from intent
+            check_connection(database, single_connection);
+        } else {
+            // check all connections
+            ArrayList<MONITorConnection> connections = database.get_connections();
+
+            for (MONITorConnection connection : connections) {
+                check_connection(database, connection);
+            }
         }
     }
 

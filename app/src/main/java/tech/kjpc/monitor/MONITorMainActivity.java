@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.SystemClock;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ public class MONITorMainActivity extends AppCompatActivity {
 
     private SimpleDateFormat timestamp_format = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
 
-    private View.OnClickListener button_click_listener = new View.OnClickListener() {
+    private View.OnClickListener connection_goto_webview_click_listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             MONITorConnection connection = (MONITorConnection) view.getTag();
@@ -51,6 +52,20 @@ public class MONITorMainActivity extends AppCompatActivity {
             MONITorConnectionView connection_view = (MONITorConnectionView) view;
             dialog_edit_connection(connection_view.get_connection());
             return true;
+        }
+    };
+
+    private View.OnClickListener connection_reload_click_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            MONITorConnection connection = (MONITorConnection) view.getTag();
+            connection.set_status(MONITorConnection.STATUS_CHECKING);
+            update_connection_views();
+            Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY, connection);
+            intent.putExtras(bundle);
+            startService(intent);
         }
     };
 
@@ -114,7 +129,10 @@ public class MONITorMainActivity extends AppCompatActivity {
             Button button = (Button) connection_view.findViewById(R.id.view_connection_link);
             button.setText(connection.get_name());
             button.setTag(connection);
-            button.setOnClickListener(this.button_click_listener);
+            button.setOnClickListener(this.connection_goto_webview_click_listener);
+            FloatingActionButton floatingactionbutton = (FloatingActionButton) connection_view.findViewById(R.id.view_connection_button_refresh);
+            floatingactionbutton.setTag(connection);
+            floatingactionbutton.setOnClickListener(this.connection_reload_click_listener);
             connection_view.setOnLongClickListener(this.connection_long_click_listener);
             main_layout.addView(connection_view);
             this.connection_views.add(connection_view);
@@ -129,9 +147,7 @@ public class MONITorMainActivity extends AppCompatActivity {
 
     // load connection from db, build layout, and update view texts
     protected void reload_connections() {
-        load_connections();
-        setup_layout();
-        update_connection_views();
+        refresh_connections();
         check_connections();
     }
 
@@ -167,10 +183,6 @@ public class MONITorMainActivity extends AppCompatActivity {
 
     public void button_add_connection_listener(View view) {
         dialog_add_connection();
-    }
-
-    public void button_refresh_listener(View view) {
-        refresh_connections();
     }
 
     private void dialog_add_connection() {
