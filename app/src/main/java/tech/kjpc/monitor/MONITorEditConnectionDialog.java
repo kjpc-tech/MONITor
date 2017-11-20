@@ -2,7 +2,9 @@ package tech.kjpc.monitor;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
@@ -21,6 +23,8 @@ import java.net.URL;
  */
 
 public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
+    public static  final String BROADCAST_EDIT_DONE_ID = "MONITor_EDIT_DONE_BROADCAST";
+
     private MONITorConnection connection;
 
     @Override
@@ -108,5 +112,11 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
             }
         });
         return builder.create();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        Intent intent = new Intent(BROADCAST_EDIT_DONE_ID);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).sendBroadcast(intent);
     }
 }

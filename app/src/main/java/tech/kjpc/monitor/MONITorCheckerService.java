@@ -31,7 +31,7 @@ public class MONITorCheckerService extends IntentService {
     public static final String NOTIFICATION_CHANNEL = "MONITor_NOTIFICATION";
     public static final int NOTIFICATION_ID = 6664867;  // MONITor in numbers
 
-    public static  final String BROADCAST_ID = "MONITor_BROADCAST";
+    public static  final String BROADCAST_CHECKER_ID = "MONITor_CHECKER_BROADCAST";
 
     private static final String SERVICE_NAME = "MONITorCheckerService";
 
@@ -122,7 +122,7 @@ public class MONITorCheckerService extends IntentService {
     }
 
     private void broadcast_completion() {
-        Intent intent = new Intent(BROADCAST_ID);
+        Intent intent = new Intent(BROADCAST_CHECKER_ID);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 

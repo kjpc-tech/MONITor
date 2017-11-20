@@ -22,4 +22,8 @@ public class MONITorConnectionView extends LinearLayout {
     public MONITorConnection get_connection() {
         return this.connection;
     }
+
+    public void update_background(int color) {
+        this.findViewById(R.id.view_connection_layout).setBackgroundColor(color);
+    }
 }

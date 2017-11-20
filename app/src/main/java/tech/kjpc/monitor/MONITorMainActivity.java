@@ -36,10 +36,12 @@ public class MONITorMainActivity extends AppCompatActivity {
 
     private SimpleDateFormat timestamp_format = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
 
+    private MONITorConnectionView current_editing_view = null;
+
     private View.OnClickListener connection_goto_webview_click_listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MONITorConnection connection = (MONITorConnection) view.getTag();
+            MONITorConnection connection = ((MONITorConnectionView) view.getTag()).get_connection();
             Intent intent = new Intent(MONITorMainActivity.this, MONITorWebViewActivity.class);
             intent.putExtra(MONITorMainActivity.CONNECTION_PARCELABLE_KEY, connection);
             startActivity(intent);
@@ -49,8 +51,10 @@ public class MONITorMainActivity extends AppCompatActivity {
     private View.OnLongClickListener connection_long_click_listener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
-            MONITorConnection connection = (MONITorConnection) view.getTag();
-            dialog_edit_connection(connection);
+            MONITorConnectionView connection_view = (MONITorConnectionView) view.getTag();
+            connection_view.update_background(getResources().getColor(R.color.color_monitor_connection_view_bg_editing));
+            dialog_edit_connection(connection_view.get_connection());
+            current_editing_view = connection_view;
             return true;
         }
     };
@@ -58,7 +62,7 @@ public class MONITorMainActivity extends AppCompatActivity {
     private View.OnClickListener connection_reload_click_listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MONITorConnection connection = (MONITorConnection) view.getTag();
+            MONITorConnection connection = ((MONITorConnectionView) view.getTag()).get_connection();
             connection.set_status(MONITorConnection.STATUS_CHECKING);
             update_connection_views();
             Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
@@ -77,14 +81,23 @@ public class MONITorMainActivity extends AppCompatActivity {
         // connect to database
         this.monitor_database = new MONITorDatabase(getApplicationContext());
 
-        BroadcastReceiver checker_result_receiver = new BroadcastReceiver() {
+        BroadcastReceiver local_broadcast_receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                refresh_connections();
+                String action = intent.getAction();
+                if (action != null) {
+                    if (intent.getAction().equals(MONITorCheckerService.BROADCAST_CHECKER_ID)) {
+                        refresh_connections();
+                    } else if (intent.getAction().equals(MONITorEditConnectionDialog.BROADCAST_EDIT_DONE_ID)) {
+                        current_editing_view.update_background(getResources().getColor(R.color.color_monitor_connection_view_bg));
+                    }
+                }
             }
         };
         LocalBroadcastManager.getInstance(getApplicationContext())
-                .registerReceiver(checker_result_receiver, new IntentFilter(MONITorCheckerService.BROADCAST_ID));
+                .registerReceiver(local_broadcast_receiver, new IntentFilter(MONITorCheckerService.BROADCAST_CHECKER_ID));
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .registerReceiver(local_broadcast_receiver, new IntentFilter(MONITorEditConnectionDialog.BROADCAST_EDIT_DONE_ID));
 
         reload_connections();
 
@@ -126,15 +139,15 @@ public class MONITorMainActivity extends AppCompatActivity {
         main_layout.removeAllViews();
         for (MONITorConnection connection : this.connections) {
             MONITorConnectionView connection_view = new MONITorConnectionView(this, connection);
-            connection_view.setTag(connection);
+            connection_view.setTag(connection_view);
             connection_view.setOnLongClickListener(this.connection_long_click_listener);
             Button button = (Button) connection_view.findViewById(R.id.view_connection_link);
             button.setText(connection.get_name());
-            button.setTag(connection);
+            button.setTag(connection_view);
             button.setOnClickListener(this.connection_goto_webview_click_listener);
             button.setOnLongClickListener(this.connection_long_click_listener);
             FloatingActionButton floatingactionbutton = (FloatingActionButton) connection_view.findViewById(R.id.view_connection_button_refresh);
-            floatingactionbutton.setTag(connection);
+            floatingactionbutton.setTag(connection_view);
             floatingactionbutton.setOnClickListener(this.connection_reload_click_listener);
             floatingactionbutton.setOnLongClickListener(this.connection_long_click_listener);
             main_layout.addView(connection_view);
