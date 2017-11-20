@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="tech.kjpc.monitor">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="tech.kjpc.monitorapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,22 +13,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".MONITorCheckerService"
+        <service android:name="tech.kjpc.monitorapp.MONITorCheckerService"
             android:enabled="true">
         </service>
 
-        <receiver android:name=".MONITorBroadcastReceiver"
+        <receiver android:name="tech.kjpc.monitorapp.MONITorBroadcastReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".MONITorAlarmReciever"
+        <receiver android:name="tech.kjpc.monitorapp.MONITorAlarmReciever"
             android:enabled="true">
         </receiver>
 
-        <activity android:name=".MONITorMainActivity">
+        <activity android:name="tech.kjpc.monitorapp.MONITorMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,10 +36,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MONITorWebViewActivity"
+        <activity android:name="tech.kjpc.monitorapp.MONITorWebViewActivity"
                   android:label="@string/activity_monitor_webview_title"
                   android:theme="@style/AppTheme"
-                  android:parentActivityName=".MONITorMainActivity">
+                  android:parentActivityName="tech.kjpc.monitorapp.MONITorMainActivity">
         </activity>
     </application>
 

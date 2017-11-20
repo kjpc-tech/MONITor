@@ -1,4 +1,4 @@
-package tech.kjpc.monitor;
+package tech.kjpc.monitorapp;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

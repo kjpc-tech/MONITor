@@ -9,7 +9,7 @@
 MONITor is in early development and doesn't work very well.. :(
 
 ## Play Store
-[MONITor is available in the Play Store](https://play.google.com/store/apps/details?id=tech.kjpc.monitor).
+[MONITor is available in the Play Store](https://play.google.com/store/apps/details?id=tech.kjpc.monitorapp).
 
 ## Motivation
 How do you monitor [Monit](https://mmonit.com/monit/) and make sure it is running? You need some device that is always running to periodically check on it. Maybe the only device you have that is always on (besides the device running Monit) is an Android phone. This is where MONITor comes in handy.

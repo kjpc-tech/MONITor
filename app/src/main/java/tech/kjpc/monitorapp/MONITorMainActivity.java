@@ -1,4 +1,4 @@
-package tech.kjpc.monitor;
+package tech.kjpc.monitorapp;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

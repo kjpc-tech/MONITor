@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tech.kjpc.monitor.MONITorMainActivity">
+    tools:context="tech.kjpc.monitorapp.MONITorMainActivity">
 
     <LinearLayout
         android:id="@+id/main_connection_holder"

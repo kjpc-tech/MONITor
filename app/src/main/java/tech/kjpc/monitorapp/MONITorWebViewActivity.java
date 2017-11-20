@@ -1,4 +1,4 @@
-package tech.kjpc.monitor;
+package tech.kjpc.monitorapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
