@@ -49,8 +49,8 @@ public class MONITorMainActivity extends AppCompatActivity {
     private View.OnLongClickListener connection_long_click_listener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
-            MONITorConnectionView connection_view = (MONITorConnectionView) view;
-            dialog_edit_connection(connection_view.get_connection());
+            MONITorConnection connection = (MONITorConnection) view.getTag();
+            dialog_edit_connection(connection);
             return true;
         }
     };
@@ -126,14 +126,17 @@ public class MONITorMainActivity extends AppCompatActivity {
         main_layout.removeAllViews();
         for (MONITorConnection connection : this.connections) {
             MONITorConnectionView connection_view = new MONITorConnectionView(this, connection);
+            connection_view.setTag(connection);
+            connection_view.setOnLongClickListener(this.connection_long_click_listener);
             Button button = (Button) connection_view.findViewById(R.id.view_connection_link);
             button.setText(connection.get_name());
             button.setTag(connection);
             button.setOnClickListener(this.connection_goto_webview_click_listener);
+            button.setOnLongClickListener(this.connection_long_click_listener);
             FloatingActionButton floatingactionbutton = (FloatingActionButton) connection_view.findViewById(R.id.view_connection_button_refresh);
             floatingactionbutton.setTag(connection);
             floatingactionbutton.setOnClickListener(this.connection_reload_click_listener);
-            connection_view.setOnLongClickListener(this.connection_long_click_listener);
+            floatingactionbutton.setOnLongClickListener(this.connection_long_click_listener);
             main_layout.addView(connection_view);
             this.connection_views.add(connection_view);
         }
