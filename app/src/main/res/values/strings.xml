@@ -3,6 +3,14 @@
 
     <string name="activity_monitor_webview_title">Monit Interface</string>
 
+    <string name="activity_monitor_help_title">MONITor Help</string>
+    <string name="monitor_help_add_title">Adding a Connection</string>
+    <string name="monitor_help_add_help">Click the add button in the lower right corner of the screen. A dialog will appear with a form to fill out. Fill out the form and click create to add the connection. If there are errors, the connection will not be created.</string>
+    <string name="monitor_help_edit_title">Editing a Connection</string>
+    <string name="monitor_help_edit_help">Long click anywhere in the connection view. A dialog will appear with a form containing the populated connection information. Change any of the information and click save to update the connection.</string>
+    <string name="monitor_help_delete_title">Deleting a Connection</string>
+    <string name="monitor_help_delete_help">Long click anywhere in the connection view. A dialog will appear with a form containing the populated connection information. Click delete if you wish to delete this connection.</string>
+
     <string name="view_monitor_connection_status_label">Status:</string>
     <string name="view_monitor_connection_timestamp_label">Last Checked:</string>
 
@@ -30,4 +38,13 @@
 
     <string name="notification_monitor_status_title">MONITor Detected an Issue</string>
     <string name="notification_monitor_status_text">%1$s: %2$s</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string-array name="navigation_drawer_options">
+        <item>Help</item>
+        <item>Developer</item>
+    </string-array>
+
+    <string name="developer_link">https://kjpc.tech/developerlink/</string>
 </resources>

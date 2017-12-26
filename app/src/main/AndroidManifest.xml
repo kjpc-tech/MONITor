@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="tech.kjpc.monitorapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tech.kjpc.monitorapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -12,35 +13,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".MONITorCheckerService"
+            android:enabled="true"></service>
 
-        <service android:name="tech.kjpc.monitorapp.MONITorCheckerService"
-            android:enabled="true">
-        </service>
-
-        <receiver android:name="tech.kjpc.monitorapp.MONITorBroadcastReceiver"
+        <receiver
+            android:name=".MONITorBroadcastReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".MONITorAlarmReciever"
+            android:enabled="true"></receiver>
 
-        <receiver android:name="tech.kjpc.monitorapp.MONITorAlarmReciever"
-            android:enabled="true">
-        </receiver>
-
-        <activity android:name="tech.kjpc.monitorapp.MONITorMainActivity">
+        <activity android:name=".MONITorMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="tech.kjpc.monitorapp.MONITorWebViewActivity"
-                  android:label="@string/activity_monitor_webview_title"
-                  android:theme="@style/AppTheme"
-                  android:parentActivityName="tech.kjpc.monitorapp.MONITorMainActivity">
-        </activity>
+        <activity
+            android:name=".MONITorWebViewActivity"
+            android:label="@string/activity_monitor_webview_title"
+            android:parentActivityName=".MONITorMainActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".MONITorHelpActivity"
+            android:label="@string/activity_monitor_help_title"
+            android:parentActivityName=".MONITorMainActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -6,15 +6,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +40,8 @@ public class MONITorMainActivity extends AppCompatActivity {
     private MONITorDatabase monitor_database;
     private ArrayList<MONITorConnection> connections;
     private ArrayList<MONITorConnectionView> connection_views;
+
+    private ActionBarDrawerToggle drawer_toggle;
 
     private SimpleDateFormat timestamp_format = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
 
@@ -73,10 +82,37 @@ public class MONITorMainActivity extends AppCompatActivity {
         }
     };
 
+    private ListView.OnItemClickListener navigation_drawer_click_listener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            TextView text_view = (TextView) view.findViewById(R.id.navigation_drawer_item);
+            String item_text = text_view.getText().toString();
+            Intent intent = null;
+            if (item_text.equals("Help")) {
+                intent = new Intent(MONITorMainActivity.this, MONITorHelpActivity.class);
+            } else if (item_text.equals("Developer")) {
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.developer_link)));
+            }
+            if (intent != null) {
+                startActivity(intent);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor_main);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String[] navigation_options = getResources().getStringArray(R.array.navigation_drawer_options);
+        DrawerLayout drawer_layout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
+        drawer_toggle = new ActionBarDrawerToggle(this, drawer_layout, R.string.drawer_open, R.string.drawer_close) {};
+        drawer_layout.addDrawerListener(drawer_toggle);
+        ListView navigation_list_view = (ListView) findViewById(R.id.main_navigation_list_view);
+        navigation_list_view.setAdapter(new ArrayAdapter<String>(this, R.layout.navigation_drawer_item, navigation_options));
+        navigation_list_view.setOnItemClickListener(navigation_drawer_click_listener);
 
         // connect to database
         this.monitor_database = new MONITorDatabase(getApplicationContext());
@@ -102,6 +138,20 @@ public class MONITorMainActivity extends AppCompatActivity {
         reload_connections();
 
         schedule_alarm();
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawer_toggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawer_toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
