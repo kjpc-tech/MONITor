@@ -14,7 +14,7 @@ import android.os.SystemClock;
 public class MONITorBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent receiver_intent) {
-        long interval = 10;
+        long interval = MONITorSettingsActivity.get_ping_time(context);
         Intent intent = new Intent(context, MONITorAlarmReciever.class);
         final PendingIntent pending_intent = PendingIntent.getBroadcast(context, MONITorAlarmReciever.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm_manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

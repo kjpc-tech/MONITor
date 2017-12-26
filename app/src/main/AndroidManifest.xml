@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <service
             android:name=".MONITorCheckerService"
-            android:enabled="true"></service>
+            android:enabled="true" />
 
         <receiver
             android:name=".MONITorBroadcastReceiver"
@@ -26,7 +26,7 @@
         </receiver>
         <receiver
             android:name=".MONITorAlarmReciever"
-            android:enabled="true"></receiver>
+            android:enabled="true" />
 
         <activity android:name=".MONITorMainActivity">
             <intent-filter>
@@ -39,10 +39,14 @@
             android:name=".MONITorWebViewActivity"
             android:label="@string/activity_monitor_webview_title"
             android:parentActivityName=".MONITorMainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MONITorHelpActivity"
             android:label="@string/activity_monitor_help_title"
+            android:parentActivityName=".MONITorMainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".MONITorSettingsActivity"
+            android:label="@string/activity_monitor_settings_title"
             android:parentActivityName=".MONITorMainActivity"
             android:theme="@style/AppTheme"></activity>
     </application>

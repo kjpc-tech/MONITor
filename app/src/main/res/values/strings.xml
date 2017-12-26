@@ -11,6 +11,10 @@
     <string name="monitor_help_delete_title">Deleting a Connection</string>
     <string name="monitor_help_delete_help">Long click anywhere in the connection view. A dialog will appear with a form containing the populated connection information. Click delete if you wish to delete this connection.</string>
 
+    <string name="activity_monitor_settings_title">MONITor Settings</string>
+    <string name="monitor_settings_ping_title">Ping Interval</string>
+    <string name="monitor_settings_ping_help">This setting indicates how often MONITor should ping the connections in minutes.</string>
+
     <string name="view_monitor_connection_status_label">Status:</string>
     <string name="view_monitor_connection_timestamp_label">Last Checked:</string>
 
@@ -43,6 +47,7 @@
     <string name="drawer_close">Close</string>
     <string-array name="navigation_drawer_options">
         <item>Help</item>
+        <item>Settings</item>
         <item>Developer</item>
     </string-array>
 
