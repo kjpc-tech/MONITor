@@ -13,7 +13,14 @@
 
     <string name="activity_monitor_settings_title">MONITor Settings</string>
     <string name="monitor_settings_ping_title">Ping Interval</string>
-    <string name="monitor_settings_ping_help">This setting indicates how often MONITor should ping the connections in minutes.</string>
+    <string name="monitor_settings_ping_help">This setting indicates how often MONITor should ping the connections.</string>
+    <string-array name="monitor_settings_ping_options">
+        <item>Fifteen Minutes</item>
+        <item>Half Hour</item>
+        <item>Hour</item>
+        <item>Half Day</item>
+        <item>Day</item>
+    </string-array>
 
     <string name="view_monitor_connection_status_label">Status:</string>
     <string name="view_monitor_connection_timestamp_label">Last Checked:</string>

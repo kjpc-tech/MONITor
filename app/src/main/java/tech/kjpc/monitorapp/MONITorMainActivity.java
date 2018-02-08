@@ -171,12 +171,12 @@ public class MONITorMainActivity extends AppCompatActivity {
     }
 
     private void schedule_alarm() {
-        long interval = 10;
-        Intent intent = new Intent(getApplicationContext(), MONITorAlarmReciever.class);
-        final PendingIntent pending_intent = PendingIntent.getBroadcast(this, MONITorAlarmReciever.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long interval = MONITorSettingsActivity.get_ping_time(getApplicationContext());
+        Intent intent = new Intent(getApplicationContext(), MONITorAlarmReceiver.class);
+        final PendingIntent pending_intent = PendingIntent.getBroadcast(this, MONITorAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm_manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarm_manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), interval, pending_intent);
-        Log.d(MONITorMainActivity.LOG_TAG, "Set alarm.");
+        alarm_manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + interval, interval, pending_intent);
+        Log.d(MONITorMainActivity.LOG_TAG, "MONITorMainActivity: Set alarm for every " + String.valueOf(interval / 1000 / 60) + " minute(s).");
     }
 
     // load connections from database

@@ -41,10 +41,11 @@ public class MONITorCheckerService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        //Log.d(MONITorMainActivity.LOG_TAG, "Service running.");
         Context context = getApplicationContext();
         MONITorDatabase database = new MONITorDatabase(context);
         MONITorConnection single_connection = null;
+
+        Log.d(MONITorMainActivity.LOG_TAG, "MONITorCheckerService: running.");
 
         if (intent != null && intent.hasExtra(MONITorMainActivity.CONNECTION_PARCELABLE_KEY)) {
             try {

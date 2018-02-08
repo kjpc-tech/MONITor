@@ -25,7 +25,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".MONITorAlarmReciever"
+            android:name=".MONITorAlarmReceiver"
             android:enabled="true" />
 
         <activity android:name=".MONITorMainActivity">
@@ -45,7 +45,8 @@
             android:label="@string/activity_monitor_help_title"
             android:parentActivityName=".MONITorMainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".MONITorSettingsActivity"
+        <activity
+            android:name=".MONITorSettingsActivity"
             android:label="@string/activity_monitor_settings_title"
             android:parentActivityName=".MONITorMainActivity"
             android:theme="@style/AppTheme"></activity>

@@ -1,11 +1,13 @@
 package tech.kjpc.monitorapp;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +23,8 @@ public class MONITorSettingsActivity extends AppCompatActivity {
 
     public static final String SETTING_PING_TIME = "SETTING_PING_TIME";
 
-    private EditText settings_ping;
+    private Spinner settings_ping;
+    private ArrayAdapter<CharSequence> settings_ping_options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +37,17 @@ public class MONITorSettingsActivity extends AppCompatActivity {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
 
-        this.settings_ping = (EditText) findViewById(R.id.monitor_settings_ping);
+        this.settings_ping = (Spinner) findViewById(R.id.monitor_settings_ping);
+        this.settings_ping_options = ArrayAdapter.createFromResource(this, R.array.monitor_settings_ping_options, R.layout.spinner_item);
+        this.settings_ping.setAdapter(this.settings_ping_options);
+
 
         // load settings from file
         JSONObject settings = load_settings(getApplicationContext());
 
         // put settings into layout
         try {
-            this.settings_ping.setText(String.valueOf(settings.getLong(SETTING_PING_TIME)));
+            this.settings_ping.setSelection(this.settings_ping_options.getPosition(settings.getString(SETTING_PING_TIME)));
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
@@ -83,7 +89,7 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         // second attempt: create new settings and set default values
         try {
             JSONObject default_settings = new JSONObject();
-            default_settings.put(SETTING_PING_TIME, 10);
+            default_settings.put(SETTING_PING_TIME, "Fifteen Minutes");
             return default_settings;
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
@@ -109,7 +115,7 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         JSONObject settings = load_settings(getApplicationContext());
 
         // get settings from layout
-        long settings_ping_value = Long.parseLong(this.settings_ping.getText().toString());
+        String settings_ping_value = this.settings_ping.getSelectedItem().toString();
 
         // update setting values
         try {
@@ -123,15 +129,27 @@ public class MONITorSettingsActivity extends AppCompatActivity {
     }
 
     protected static long get_ping_time(Context context) {
-        long ping_time = 10; // 10 is default value
+        String ping_time = "Fifteen Minutes";  // default value
         JSONObject settings = load_settings(context);
         if (settings.has(SETTING_PING_TIME)) {
             try {
-                ping_time = settings.getLong(SETTING_PING_TIME);
+                ping_time = settings.getString(SETTING_PING_TIME);
             } catch (JSONException e) {
                 Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
             }
         }
-        return ping_time;
+        switch (ping_time) {
+            case "Half Hour":
+                return AlarmManager.INTERVAL_HALF_HOUR;
+            case "Hour":
+                return AlarmManager.INTERVAL_HOUR;
+            case "Half Day":
+                return AlarmManager.INTERVAL_HALF_DAY;
+            case "Day":
+                return AlarmManager.INTERVAL_DAY;
+            default:
+                // Fifteen Minutes
+                return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        }
     }
 }

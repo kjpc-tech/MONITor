@@ -26,12 +26,12 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/monitor_settings_ping"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number" />
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
