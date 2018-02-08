@@ -127,7 +127,12 @@ public class MONITorMainActivity extends AppCompatActivity {
                     if (intent.getAction().equals(MONITorCheckerService.BROADCAST_CHECKER_ID)) {
                         refresh_connections();
                     } else if (intent.getAction().equals(MONITorEditConnectionDialog.BROADCAST_EDIT_DONE_ID)) {
-                        current_editing_view.update_background(getResources().getColor(R.color.color_monitor_connection_view_bg));
+                        try {
+                            current_editing_view.update_background(getResources().getColor(R.color.color_monitor_connection_view_bg));
+                        } catch (NullPointerException e) {
+                            // todo why is this happening?
+                            Log.e(LOG_TAG, e.getMessage());
+                        }
                     }
                 }
             }
