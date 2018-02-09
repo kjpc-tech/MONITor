@@ -3,6 +3,7 @@
     <color name="color_primary">#7e7e7e</color>
     <color name="color_primary_dark">#222222</color>
     <color name="color_accent">#d9eaff</color>
+    <color name="color_accent_dark">#98b6dc</color>
     <color name="color_white">#ffffff</color>
     <color name="color_monitor_connection_view_bg">#edf5ff</color>
     <color name="color_monitor_connection_view_bg_editing">#d9eaff</color>

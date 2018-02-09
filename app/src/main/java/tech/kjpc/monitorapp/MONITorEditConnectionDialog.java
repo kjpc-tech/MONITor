@@ -22,7 +22,7 @@ import java.net.URL;
  * Created by kyle on 11/1/17.
  */
 
-public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
+public class MONITorEditConnectionDialog extends AppCompatDialogFragment implements DialogInterface.OnShowListener {
     public static  final String BROADCAST_EDIT_DONE_ID = "MONITor_EDIT_DONE_BROADCAST";
 
     private MONITorConnection connection;
@@ -111,7 +111,20 @@ public class MONITorEditConnectionDialog extends AppCompatDialogFragment {
 
             }
         });
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(this);
+        return dialog;
+    }
+
+    @Override
+    public void onShow(DialogInterface dialog) {
+        try {
+            ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.color_accent_dark));
+            ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(getResources().getColor(R.color.color_accent_dark));
+            ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.color_accent_dark));
+        } catch (Exception e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
     }
 
     @Override
