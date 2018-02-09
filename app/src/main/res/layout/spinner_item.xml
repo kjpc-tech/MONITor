@@ -3,5 +3,4 @@
     android:id="@+id/spinner_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
-</TextView>
+    android:padding="@dimen/spinner_item_padding"></TextView>

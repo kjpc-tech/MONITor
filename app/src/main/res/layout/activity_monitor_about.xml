@@ -10,7 +10,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp">
+        android:layout_margin="@dimen/main_margin"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
                 android:text="@string/monitor_about_title"
                 android:textSize="18sp"
                 android:textStyle="bold" />

@@ -10,19 +10,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/main_margin"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
                 android:text="@string/monitor_help_add_title"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -36,14 +35,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/main_margin"
                 android:text="@string/monitor_help_edit_title"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -57,14 +55,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/main_margin"
                 android:text="@string/monitor_help_delete_title"
                 android:textSize="18sp"
                 android:textStyle="bold" />

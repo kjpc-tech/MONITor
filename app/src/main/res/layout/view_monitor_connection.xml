@@ -4,7 +4,7 @@
     android:id="@+id/view_connection_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_marginTop="@dimen/main_margin"
     android:background="@drawable/bordered_block"
     android:orientation="vertical">
 
