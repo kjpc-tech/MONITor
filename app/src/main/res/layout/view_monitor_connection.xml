@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@color/color_monitor_connection_view_bg"
+    android:background="@drawable/bordered_block"
     android:orientation="vertical"
     android:padding="5dp">
 
     <Button
         android:id="@+id/view_connection_link"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/color_primary"
+        android:textColor="@color/color_white" />
 
     <GridLayout
         android:layout_width="match_parent"
@@ -86,7 +88,7 @@
             android:scaleType="center"
             android:scaleX=".75"
             android:scaleY=".75"
-            app:backgroundTint="@color/color_action_button"
+            app:backgroundTint="@color/color_primary"
             app:elevation="0dp"
             app:srcCompat="@drawable/ic_reload" />
 

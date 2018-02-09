@@ -61,7 +61,7 @@ public class MONITorMainActivity extends AppCompatActivity {
         @Override
         public boolean onLongClick(View view) {
             MONITorConnectionView connection_view = (MONITorConnectionView) view.getTag();
-            connection_view.update_background(getResources().getColor(R.color.color_monitor_connection_view_bg_editing));
+            connection_view.set_background_active();
             dialog_edit_connection(connection_view.get_connection());
             current_editing_view = connection_view;
             return true;
@@ -128,7 +128,7 @@ public class MONITorMainActivity extends AppCompatActivity {
                         refresh_connections();
                     } else if (intent.getAction().equals(MONITorEditConnectionDialog.BROADCAST_EDIT_DONE_ID)) {
                         try {
-                            current_editing_view.update_background(getResources().getColor(R.color.color_monitor_connection_view_bg));
+                            current_editing_view.set_background_normal();
                         } catch (NullPointerException e) {
                             // todo why is this happening?
                             Log.e(LOG_TAG, e.getMessage());

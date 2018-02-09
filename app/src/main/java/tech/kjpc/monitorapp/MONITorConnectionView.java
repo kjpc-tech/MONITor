@@ -23,7 +23,11 @@ public class MONITorConnectionView extends LinearLayout {
         return this.connection;
     }
 
-    public void update_background(int color) {
-        this.findViewById(R.id.view_connection_layout).setBackgroundColor(color);
+    public void set_background_normal() {
+        this.findViewById(R.id.view_connection_layout).setBackground(getResources().getDrawable(R.drawable.bordered_block));
+    }
+
+    public void set_background_active() {
+        this.findViewById(R.id.view_connection_layout).setBackground(getResources().getDrawable(R.drawable.bordered_block_active));
     }
 }

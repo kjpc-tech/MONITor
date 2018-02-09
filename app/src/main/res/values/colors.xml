@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_primary">#7e7e7e</color>
-    <color name="color_primary_dark">#505050</color>
-    <color name="color_accent">#6b9366</color>
-    <color name="color_action_button">#AAAAAA</color>
-    <color name="color_monitor_connection_view_bg">#6419e8ff</color>
-    <color name="color_monitor_connection_view_bg_editing">#641981ff</color>
-    <color name="color_text_good">#009900</color>
-    <color name="color_text_error">#990000</color>
+    <color name="color_primary_dark">#222222</color>
+    <color name="color_accent">#d9eaff</color>
+    <color name="color_white">#ffffff</color>
+    <color name="color_monitor_connection_view_bg">#edf5ff</color>
+    <color name="color_monitor_connection_view_bg_editing">#d9eaff</color>
+    <color name="color_text_normal">#222222</color>
+    <color name="color_text_good">#00cc00</color>
+    <color name="color_text_error">#cc0000</color>
 </resources>
