@@ -49,7 +49,12 @@
             android:name=".MONITorSettingsActivity"
             android:label="@string/activity_monitor_settings_title"
             android:parentActivityName=".MONITorMainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".MONITorAboutActivity"
+            android:label="@string/activity_monitor_about_title"
+            android:parentActivityName=".MONITorMainActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

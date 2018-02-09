@@ -92,6 +92,8 @@ public class MONITorMainActivity extends AppCompatActivity {
                 intent = new Intent(MONITorMainActivity.this, MONITorHelpActivity.class);
             } else if (item_text.equals("Settings")) {
                 intent = new Intent(MONITorMainActivity.this, MONITorSettingsActivity.class);
+            } else if (item_text.equals("About")) {
+                intent = new Intent(MONITorMainActivity.this, MONITorAboutActivity.class);
             } else if (item_text.equals("Developer")) {
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.developer_link)));
             }
