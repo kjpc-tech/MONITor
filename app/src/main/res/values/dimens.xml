@@ -5,4 +5,5 @@
     <dimen name="navigation_drawer_item_padding">20dp</dimen>
     <dimen name="spinner_item_padding">15dp</dimen>
     <dimen name="connection_view_padding">8dp</dimen>
+    <dimen name="scroll_view_padding">2dp</dimen>
 </resources>
