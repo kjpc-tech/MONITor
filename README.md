@@ -5,9 +5,6 @@
 ## KJ PC | [kjpc.tech](https://kjpc.tech/) | [kyle@kjpc.tech](mailto:kyle@kjpc.tech)
 ---
 
-## Warning
-MONITor is in early development and doesn't work very well.. :(
-
 ## Play Store
 [MONITor is available in the Play Store](https://play.google.com/store/apps/details?id=tech.kjpc.monitorapp).
 
