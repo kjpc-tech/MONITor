@@ -106,6 +106,8 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         try {
             JSONObject default_settings = new JSONObject();
             default_settings.put(SETTING_PING_TIME, "Fifteen Minutes");
+            default_settings.put(SETTING_VIBRATION, false);
+            default_settings.put(SETTING_SOUND, false);
             return default_settings;
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
