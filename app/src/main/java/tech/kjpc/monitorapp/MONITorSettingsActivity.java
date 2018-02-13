@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +23,13 @@ public class MONITorSettingsActivity extends AppCompatActivity {
     private static final String SETTINGS_FILE = "monitor_settings";
 
     public static final String SETTING_PING_TIME = "SETTING_PING_TIME";
+    public static final String SETTING_VIBRATION = "SETTING_VIBRATION";
+    public static final String SETTING_SOUND = "SETTING_SOUND";
 
     private Spinner settings_ping;
     private ArrayAdapter<CharSequence> settings_ping_options;
+    private Switch settings_vibration;
+    private Switch settings_sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,8 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         this.settings_ping = (Spinner) findViewById(R.id.monitor_settings_ping);
         this.settings_ping_options = ArrayAdapter.createFromResource(this, R.array.monitor_settings_ping_options, R.layout.spinner_item);
         this.settings_ping.setAdapter(this.settings_ping_options);
-
+        this.settings_vibration = (Switch) findViewById(R.id.monitor_settings_vibration);
+        this.settings_sound = (Switch) findViewById(R.id.monitor_settings_sound);
 
         // load settings from file
         JSONObject settings = load_settings(getApplicationContext());
@@ -48,6 +54,16 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         // put settings into layout
         try {
             this.settings_ping.setSelection(this.settings_ping_options.getPosition(settings.getString(SETTING_PING_TIME)));
+        } catch (JSONException e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
+        try {
+            this.settings_vibration.setChecked(settings.getBoolean(SETTING_VIBRATION));
+        } catch (JSONException e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
+        try {
+            this.settings_sound.setChecked(settings.getBoolean(SETTING_SOUND));
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
@@ -116,10 +132,22 @@ public class MONITorSettingsActivity extends AppCompatActivity {
 
         // get settings from layout
         String settings_ping_value = this.settings_ping.getSelectedItem().toString();
+        Boolean settings_vibration_value = this.settings_vibration.isChecked();
+        Boolean settings_sound_value = this.settings_sound.isChecked();
 
         // update setting values
         try {
             settings.put(SETTING_PING_TIME, settings_ping_value);
+        } catch (JSONException e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
+        try {
+            settings.put(SETTING_VIBRATION, settings_vibration_value);
+        } catch (JSONException e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
+        try {
+            settings.put(SETTING_SOUND, settings_sound_value);
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
@@ -151,5 +179,29 @@ public class MONITorSettingsActivity extends AppCompatActivity {
                 // Fifteen Minutes
                 return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
         }
+    }
+
+    protected static boolean get_use_vibration(Context context) {
+        JSONObject settings = load_settings(context);
+        if (settings.has(SETTING_VIBRATION)) {
+            try {
+                return settings.getBoolean(SETTING_VIBRATION);
+            } catch (JSONException e) {
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+            }
+        }
+        return false;  // no vibration by default
+    }
+
+    protected static boolean get_use_sound(Context context) {
+        JSONObject settings = load_settings(context);
+        if (settings.has(SETTING_SOUND)) {
+            try {
+                return settings.getBoolean(SETTING_SOUND);
+            } catch (JSONException e) {
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+            }
+        }
+        return false;  // no sound by default
     }
 }

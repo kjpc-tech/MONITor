@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
@@ -139,6 +140,14 @@ public class MONITorCheckerService extends IntentService {
             notification_builder.setContentText(getResources().getString(R.string.notification_monitor_status_text, connection.get_name(), connection.get_status()));
             notification_builder.setAutoCancel(true);
             notification_builder.setContentIntent(notification_pending_intent);
+            // add vibration to the notification
+            if (MONITorSettingsActivity.get_use_vibration(getApplicationContext())) {
+                notification_builder.setVibrate(new long[]{50, 150, 50, 200, 50, 150});
+            }
+            // add sound to the notification
+            if (MONITorSettingsActivity.get_use_sound(getApplicationContext())) {
+                notification_builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            }
             NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notification_manager.notify(NOTIFICATION_ID, notification_builder.build());
         }

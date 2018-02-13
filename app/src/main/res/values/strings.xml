@@ -21,6 +21,10 @@
         <item>Half Day</item>
         <item>Day</item>
     </string-array>
+    <string name="monitor_settings_vibration_title">Vibration</string>
+    <string name="monitor_settings_vibration_help">This setting determines whether MONITor should vibrate the device when providing a notification.</string>
+    <string name="monitor_settings_sound_title">Sound</string>
+    <string name="monitor_settings_sound_help">This setting determines whether MONITor should make a notification sound when providing a notification.</string>
 
     <string name="activity_monitor_about_title">MONITor About</string>
     <string name="monitor_about_title">About MONITor</string>
