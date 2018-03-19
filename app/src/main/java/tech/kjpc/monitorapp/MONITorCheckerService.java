@@ -90,7 +90,7 @@ public class MONITorCheckerService extends IntentService {
 
             // check response
             if (response != null && response.length() > 0) {
-                Pattern pattern = Pattern.compile(".*Monit Service Manager.*");
+                Pattern pattern = Pattern.compile(".*Monit Service Manager.*Monit is.*running.*on.*and monitoring:.*");
                 Matcher matcher = pattern.matcher(response);
                 if (matcher.matches()) {
                     connection.set_status(MONITorConnection.STATUS_GOOD);
