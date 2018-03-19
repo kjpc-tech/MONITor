@@ -28,7 +28,7 @@
 
     <string name="activity_monitor_about_title">MONITor About</string>
     <string name="monitor_about_title">About MONITor</string>
-    <string name="monitor_about_text">How do you monitor Monit and make sure it is running? You need some device that is always running to periodically check on it. Maybe the only device you have that is always on (besides the device running Monit) is an Android phone. This is where MONITor comes in handy.</string>
+    <string name="monitor_about_text">How do you monitor Monit and make sure it is running? You need some device that is always running to periodically check on it. Maybe the only device you have that is always on (besides the device running Monit) is an Android phone. This is where MONITor comes in handy.\n\nMONITor does not check on the status of items monitored by Monit. It only checks on Monit instances to make sure they are running and lets Monit do the rest.</string>
     <string name="monitor_about_source_title">MONITor is open source:</string>
     <string name="monitor_about_source_link_title">View Source Code</string>
 
