@@ -17,10 +17,10 @@ import java.util.Date;
 public class MONITorConnection implements Parcelable {
     private static final String STATUS_DEFAULT = "N/A";
     protected static final String STATUS_CHECKING = "Checking..";
-    protected static final String STATUS_GOOD = "All is well.";
-    protected static final String STATUS_ERROR_NO_MATCH = "Error: no match.";
-    protected static final String STATUS_ERROR_NO_RESULT = "Error: no result.";
-    protected static final String STATUS_NO_NETWORK = "Error: no network.";
+    protected static final String STATUS_GOOD = "Success: can connect.";
+    protected static final String STATUS_ERROR_NO_MATCH = "Error: dashboard not visible.";
+    protected static final String STATUS_ERROR_NO_RESULT = "Error: unable to connect.";
+    protected static final String STATUS_NO_NETWORK = "Error: unable to connect, no network.";
 
     private static final Date TIMESTAMP_DEFAULT = new Date(2000, 0, 0, 0, 0);
 
