@@ -25,11 +25,13 @@ public class MONITorSettingsActivity extends AppCompatActivity {
     public static final String SETTING_PING_TIME = "SETTING_PING_TIME";
     public static final String SETTING_VIBRATION = "SETTING_VIBRATION";
     public static final String SETTING_SOUND = "SETTING_SOUND";
+    public static final String SETTING_CHECK_SSL = "SETTING_CHECK_SSL";
 
     private Spinner settings_ping;
     private ArrayAdapter<CharSequence> settings_ping_options;
     private Switch settings_vibration;
     private Switch settings_sound;
+    private Switch settings_check_ssl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         this.settings_ping.setAdapter(this.settings_ping_options);
         this.settings_vibration = (Switch) findViewById(R.id.monitor_settings_vibration);
         this.settings_sound = (Switch) findViewById(R.id.monitor_settings_sound);
+        this.settings_check_ssl = (Switch) findViewById(R.id.monitor_settings_check_ssl);
 
         // load settings from file
         JSONObject settings = load_settings(getApplicationContext());
@@ -67,6 +70,13 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
+        Boolean settings_check_ssl_value = true;  // default true
+        try {
+            settings_check_ssl_value = settings.getBoolean(SETTING_CHECK_SSL);
+        } catch (JSONException e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
+        this.settings_check_ssl.setChecked(settings_check_ssl_value);
     }
 
     @Override
@@ -108,6 +118,7 @@ public class MONITorSettingsActivity extends AppCompatActivity {
             default_settings.put(SETTING_PING_TIME, "Fifteen Minutes");
             default_settings.put(SETTING_VIBRATION, false);
             default_settings.put(SETTING_SOUND, false);
+            default_settings.put(SETTING_CHECK_SSL, true);
             return default_settings;
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
@@ -136,6 +147,7 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         String settings_ping_value = this.settings_ping.getSelectedItem().toString();
         Boolean settings_vibration_value = this.settings_vibration.isChecked();
         Boolean settings_sound_value = this.settings_sound.isChecked();
+        Boolean settings_check_ssl_value = this.settings_check_ssl.isChecked();
 
         // update setting values
         try {
@@ -150,6 +162,11 @@ public class MONITorSettingsActivity extends AppCompatActivity {
         }
         try {
             settings.put(SETTING_SOUND, settings_sound_value);
+        } catch (JSONException e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
+        try {
+            settings.put(SETTING_CHECK_SSL, settings_check_ssl_value);
         } catch (JSONException e) {
             Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
         }
@@ -205,5 +222,17 @@ public class MONITorSettingsActivity extends AppCompatActivity {
             }
         }
         return false;  // no sound by default
+    }
+
+    protected static boolean get_check_ssl(Context context) {
+        JSONObject settings = load_settings(context);
+        if (settings.has(SETTING_CHECK_SSL)) {
+            try {
+                return settings.getBoolean(SETTING_CHECK_SSL);
+            } catch (JSONException e) {
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+            }
+        }
+        return true;  // check SSL by default
     }
 }

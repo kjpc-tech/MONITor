@@ -81,5 +81,26 @@
                 android:layout_height="wrap_content"
                 android:text="@string/monitor_settings_sound_help" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/main_margin"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/monitor_settings_check_ssl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/monitor_settings_check_ssl_title"
+                android:textColor="@color/color_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/monitor_settings_check_ssl_help" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
