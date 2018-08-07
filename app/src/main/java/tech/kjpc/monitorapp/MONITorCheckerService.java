@@ -85,7 +85,7 @@ public class MONITorCheckerService extends IntentService {
                     response += line;
                 }
             } catch (IOException e) {
-                e.getMessage();
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
             }
 
             // check response
