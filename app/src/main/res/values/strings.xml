@@ -13,7 +13,7 @@
 
     <string name="activity_monitor_settings_title">MONITor Settings</string>
     <string name="monitor_settings_ping_title">Ping Interval</string>
-    <string name="monitor_settings_ping_help">This setting indicates how often MONITor should ping the connections.</string>
+    <string name="monitor_settings_ping_help">How often MONITor should ping the connections.</string>
     <string-array name="monitor_settings_ping_options">
         <item>Fifteen Minutes</item>
         <item>Half Hour</item>
@@ -22,9 +22,11 @@
         <item>Day</item>
     </string-array>
     <string name="monitor_settings_vibration_title">Vibration</string>
-    <string name="monitor_settings_vibration_help">This setting determines whether MONITor should vibrate the device when providing a notification.</string>
+    <string name="monitor_settings_vibration_help">Should MONITor vibrate the device when providing a notification.</string>
     <string name="monitor_settings_sound_title">Sound</string>
-    <string name="monitor_settings_sound_help">This setting determines whether MONITor should make a notification sound when providing a notification.</string>
+    <string name="monitor_settings_sound_help">Should MONITor make a sound when providing a notification.</string>
+    <string name="monitor_settings_check_ssl_title">Check SSL</string>
+    <string name="monitor_settings_check_ssl_help">When off, MONITor will ignore SSL certificates. Useful for self-signed certificates. Should be on if possible.</string>
 
     <string name="activity_monitor_about_title">MONITor About</string>
     <string name="monitor_about_title">About MONITor</string>

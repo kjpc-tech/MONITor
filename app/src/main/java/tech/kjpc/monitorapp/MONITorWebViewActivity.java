@@ -2,11 +2,13 @@ package tech.kjpc.monitorapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -63,6 +65,17 @@ public class MONITorWebViewActivity extends AppCompatActivity {
                 // only send auth credentials if on the connection host
                 if (host.equals(connection.get_url().getHost())) {
                     authHandler.proceed(connection.get_username(), connection.get_password());
+                }
+            }
+
+            @Override
+            public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                // ignore SSL errors if setting is off
+                // derived from https://stackoverflow.com/questions/7416096/android-webview-not-loading-an-https-url
+                if (!MONITorSettingsActivity.get_check_ssl(getApplicationContext())) {
+                    sslErrorHandler.proceed();
+                } else {
+                    super.onReceivedSslError(webView, sslErrorHandler, sslError);
                 }
             }
         });

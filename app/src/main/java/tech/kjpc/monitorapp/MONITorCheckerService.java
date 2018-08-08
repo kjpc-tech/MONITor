@@ -19,10 +19,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by kyle on 11/2/17.
@@ -76,6 +86,11 @@ public class MONITorCheckerService extends IntentService {
             // make request and get response
             try {
                 HttpURLConnection urlConnection = (HttpURLConnection) connection.get_url().openConnection();
+                // if check SSL setting is false and the connection is https
+                //  then trust all certificates
+                if (!MONITorSettingsActivity.get_check_ssl(getApplicationContext()) && urlConnection instanceof HttpsURLConnection) {
+                    trust_all_ssl((HttpsURLConnection) urlConnection);
+                }
                 urlConnection.setUseCaches(false);
                 urlConnection.setRequestProperty("Authorization", connection.get_authorization());
                 InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
@@ -85,7 +100,7 @@ public class MONITorCheckerService extends IntentService {
                     response += line;
                 }
             } catch (IOException e) {
-                e.getMessage();
+                Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
             }
 
             // check response
@@ -115,6 +130,38 @@ public class MONITorCheckerService extends IntentService {
 
         // set main activity know it should update
         broadcast_completion();
+    }
+
+    private void trust_all_ssl(HttpsURLConnection https_url_connection) {
+        // trust all SSL certificates
+        // not recommended but works for self-signed certificates
+        // derived from https://stackoverflow.com/q/2642777/5286674
+        try {
+            SSLContext ssl_context = SSLContext.getInstance("SSL");
+            ssl_context.init(null, new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {}
+
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {}
+
+                        @Override
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[0];
+                        }
+                    }
+            }, new SecureRandom());
+            https_url_connection.setSSLSocketFactory(ssl_context.getSocketFactory());
+            https_url_connection.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String s, SSLSession sslSession) {
+                    return true;
+                }
+            });
+        } catch (Exception e) {
+            Log.e(MONITorMainActivity.LOG_TAG, e.getMessage());
+        }
     }
 
     private boolean is_online() {
