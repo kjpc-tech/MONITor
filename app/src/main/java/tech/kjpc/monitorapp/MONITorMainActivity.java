@@ -78,7 +78,7 @@ public class MONITorMainActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putParcelable(MONITorMainActivity.CONNECTION_PARCELABLE_KEY, connection);
             intent.putExtras(bundle);
-            startService(intent);
+            MONITorCheckerService.enqueueWork(getApplicationContext(), MONITorCheckerService.class, MONITorAlarmReceiver.REQUEST_CODE, intent);
         }
     };
 
@@ -253,7 +253,7 @@ public class MONITorMainActivity extends AppCompatActivity {
         }
         update_connection_views();
         Intent intent = new Intent(getApplicationContext(), MONITorCheckerService.class);
-        startService(intent);
+        MONITorCheckerService.enqueueWork(getApplicationContext(), MONITorCheckerService.class, MONITorAlarmReceiver.REQUEST_CODE, intent);
     }
 
     public void button_add_connection_listener(View view) {
