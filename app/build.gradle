@@ -4,10 +4,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "tech.kjpc.monitorapp"
-        versionCode 14
-        versionName "1.1"
         minSdkVersion 21
         targetSdkVersion 28
+        versionCode 15
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
