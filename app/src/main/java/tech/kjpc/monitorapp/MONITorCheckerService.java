@@ -1,5 +1,6 @@
 package tech.kjpc.monitorapp;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
@@ -190,6 +192,14 @@ public class MONITorCheckerService extends JobIntentService {
                 notification_builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
             }
             NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // make notification channel
+                NotificationChannel notification_channel = new NotificationChannel(NOTIFICATION_CHANNEL, getString(R.string.notification_monitor_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
+                // toggle vibration to the notification channel
+                notification_channel.enableVibration(MONITorSettingsActivity.get_use_vibration(getApplicationContext()));
+                notification_manager.createNotificationChannel(notification_channel);
+
+            }
             notification_manager.notify(NOTIFICATION_ID, notification_builder.build());
         }
     }
