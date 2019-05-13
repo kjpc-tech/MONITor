@@ -16,6 +16,6 @@ public class MONITorAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(MONITorMainActivity.LOG_TAG, "MONITorAlarmReceiver: Alarm went off!");
         Intent alarm_intent = new Intent(context, MONITorCheckerService.class);
-        context.startService(alarm_intent);
+        MONITorCheckerService.enqueueWork(context, MONITorCheckerService.class, MONITorAlarmReceiver.REQUEST_CODE, alarm_intent);
     }
 }

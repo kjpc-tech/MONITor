@@ -59,6 +59,7 @@
     <string name="error_adding_connection">Error: couldn\'t add connection.</string>
     <string name="error_editing_connection">Error: couldn\'t edit connection.</string>
 
+    <string name="notification_monitor_channel_name">MONITor Notifications</string>
     <string name="notification_monitor_status_title">MONITor Detected an Issue</string>
     <string name="notification_monitor_status_text">%1$s: %2$s</string>
 

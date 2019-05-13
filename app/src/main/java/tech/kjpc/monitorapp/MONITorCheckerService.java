@@ -1,6 +1,6 @@
 package tech.kjpc.monitorapp;
 
-import android.app.IntentService;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.Nullable;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -38,20 +40,14 @@ import javax.net.ssl.X509TrustManager;
  * Created by kyle on 11/2/17.
  */
 
-public class MONITorCheckerService extends IntentService {
+public class MONITorCheckerService extends JobIntentService {
     public static final String NOTIFICATION_CHANNEL = "MONITor_NOTIFICATION";
     public static final int NOTIFICATION_ID = 6664867;  // MONITor in numbers
 
     public static  final String BROADCAST_CHECKER_ID = "MONITor_CHECKER_BROADCAST";
 
-    private static final String SERVICE_NAME = "MONITorCheckerService";
-
-    public MONITorCheckerService() {
-        super(SERVICE_NAME);
-    }
-
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleWork(@NonNull Intent intent) {
         Context context = getApplicationContext();
         MONITorDatabase database = new MONITorDatabase(context);
         MONITorConnection single_connection = null;
@@ -196,6 +192,14 @@ public class MONITorCheckerService extends IntentService {
                 notification_builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
             }
             NotificationManager notification_manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // make notification channel
+                NotificationChannel notification_channel = new NotificationChannel(NOTIFICATION_CHANNEL, getString(R.string.notification_monitor_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
+                // toggle vibration to the notification channel
+                notification_channel.enableVibration(MONITorSettingsActivity.get_use_vibration(getApplicationContext()));
+                notification_manager.createNotificationChannel(notification_channel);
+
+            }
             notification_manager.notify(NOTIFICATION_ID, notification_builder.build());
         }
     }
